@@ -6,7 +6,7 @@ export default class PanelComponent extends Component{
     constructor(props){
         super(props);
 
-        this.icons = {     //Step 2
+        this.icons = {
             'up'    : require('./images/arrow-up-01-24.png'),
             'down'  : require('./images/arrow-down-01-24.png')
         };
@@ -27,32 +27,31 @@ export default class PanelComponent extends Component{
     }
 
     toggle(){
-      //Step 1
       let initialValue    = this.state.expanded? this.state.maxHeight + this.state.minHeight : this.state.minHeight,
           finalValue      = this.state.expanded? this.state.minHeight : this.state.maxHeight + this.state.minHeight;
   
       this.setState({
-          expanded : !this.state.expanded  //Step 2
+          expanded : !this.state.expanded
       });
   
-      this.state.animation.setValue(initialValue);  //Step 3
-      Animated.spring(     //Step 4
-          this.state.animation,
-          {
-              toValue: finalValue
-          }
-      ).start();  //Step 5
+      this.state.animation.setValue(initialValue);
+      Animated.spring(
+        this.state.animation,
+        {
+            toValue: finalValue
+        }
+      ).start();
     }
     
     _setMaxHeight(event){
         this.setState({
-            maxHeight   : event.nativeEvent.layout.height
+          maxHeight   : event.nativeEvent.layout.height
         });
     }
 
     _setMinHeight(event){
         this.setState({
-            minHeight   : event.nativeEvent.layout.height
+          minHeight   : event.nativeEvent.layout.height
         });
     }
 
@@ -60,15 +59,12 @@ export default class PanelComponent extends Component{
         let icon = this.icons['down'];
 
         if(this.state.expanded){
-            icon = this.icons['up'];   //Step 4
+            icon = this.icons['up'];
         }
 
-        //Step 5
         return ( 
-            <Animated.View 
-                style={[styles.container,{height: this.state.animation}]}>
-                
-              <View style={styles.titleContainer} onLayout={this._setMinHeight.bind(this)}> //Step 1
+            <Animated.View style={[styles.container,{height: this.state.animation}]}>
+              <View style={styles.titleContainer} onLayout={this._setMinHeight.bind(this)}>
                 <Text style={styles.title}>{this.state.title}</Text>
                 <TouchableHighlight 
                     style={styles.button} 
@@ -81,10 +77,9 @@ export default class PanelComponent extends Component{
                 </TouchableHighlight>
               </View>
                 
-              <View style={styles.body} onLayout={this._setMaxHeight.bind(this)}> //Step 2
+              <View style={styles.body} onLayout={this._setMaxHeight.bind(this)}>
                   {this.props.children}
               </View>
-
              </Animated.View>
         );
     }

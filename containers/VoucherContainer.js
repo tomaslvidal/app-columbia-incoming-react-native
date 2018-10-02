@@ -18,14 +18,14 @@ export default class VoucherContainer extends Component {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 28, width: '90%', marginBottom: 7, marginTop: 7, backgroundColor: '#1B9CFC'}}>
             <View style={{paddingLeft: 5}}><Text style={[styles.texts, {} ]}> Itinerario 1 </Text></View>
             <TouchableOpacity onPress={ () => Actions.pop() }>
-              <View style={{paddingRight: 10}}> <FontAwesome5 name="cloud-download" size={25} color="white" /> </View>
+              <View style={{paddingRight: 10}}><Text><FontAwesome5 name="cloud-download" size={25} color="white" /></Text></View>
             </TouchableOpacity>
           </View>
           
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 28, width: '90%', marginBottom: 7, marginTop: 7, backgroundColor: '#1B9CFC'}}>
             <View style={{paddingLeft: 5}}><Text style={[styles.texts, {} ]}> Itinerario 2 </Text></View>
             <TouchableOpacity onPress={ () => Actions.pop() }>
-              <View style={{paddingRight: 10}}> <FontAwesome5 name="cloud-download" size={25} color="white" /> </View>
+              <View style={{paddingRight: 10}}><Text><FontAwesome5 name="cloud-download" size={25} color="white" /></Text></View>
             </TouchableOpacity>
           </View>
           
@@ -33,14 +33,14 @@ export default class VoucherContainer extends Component {
             <View style={{paddingLeft: 5}}><Text style={[styles.texts, {} ]}> Voucher 1 </Text></View>
             
             <TouchableOpacity onPress={ () => Actions.pop() }>
-              <View style={{paddingRight: 10}}> <FontAwesome5 name="cloud-download" size={25} color="white" /> </View>
+              <View style={{paddingRight: 10}}><Text><FontAwesome5 name="cloud-download" size={25} color="white" /></Text></View>
             </TouchableOpacity>
           </View>
           
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 28, width: '90%', marginBottom: 7, marginTop: 7, backgroundColor: '#1B9CFC'}}>
             <View style={{paddingLeft: 5}}><Text style={[styles.texts, {} ]}> Voucher 1 </Text></View>
             <TouchableOpacity onPress={ () => Actions.pop() }>
-            <View style={{paddingRight: 10}}> <FontAwesome5 name="cloud-download" size={25} color="white" /> </View>
+            <View style={{paddingRight: 10}}><Text><FontAwesome5 name="cloud-download" size={25} color="white" /></Text></View>
             </TouchableOpacity>
           </View>
         </View>

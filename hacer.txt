@@ -1,3 +1,0 @@
--Dejar andando las apps como ya estan, osea debuggearlas nada de ir de agregando cosas
--Listar cosas que quedan completar
--Login con oauth2, que ya hecho
