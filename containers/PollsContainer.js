@@ -4,7 +4,6 @@ import {Scene,Router, Actions} from 'react-native-router-flux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CollapsibleList from 'react-native-collapsible-list'
 import Div from './ModelContainer/index.js';
-import Panel from '../components/PanelComponent.js';
 import * as t from 'tcomb-form-native'
 var Form = t.form.Form;
 import * as tvalidation from 'tcomb-validation';
@@ -42,30 +41,7 @@ export default class PollsContainer extends Component {
       <Div name="Encuesta" icon="bar-chart">
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <Panel title="Encuesta de calidad 1">
-            <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
-              <Form
-                ref="form"
-                type={Person}
-                options={options}
-              />
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </View>
-          </Panel>
-          <Panel title="Encuesta de calidad 2">
-            <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
-              <Form
-                ref="form"
-                type={Person}
-                options={options}
-              />
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </View>
-          </Panel>
+
         </ScrollView>
       </View>
       </Div>
