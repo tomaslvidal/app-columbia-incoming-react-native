@@ -13,7 +13,7 @@ import LoginForm from './LoginForm.js';
     render() {
         return (
           <View style={{flex:1, flexDirection: 'column'}}>
-            <KeyboardAvoidingView behavior="padding" style={[styles.container, { marginTop: 30 }]}>
+            <KeyboardAvoidingView style={[styles.container]}>
               <View style={styles.loginContainer}>
               <Image resizeMode="contain" style={styles.logo} source={require('./logo_columbia.png')} />
               </View>
@@ -30,8 +30,7 @@ import LoginForm from './LoginForm.js';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#2d3436',
-        marginTop: 20
+        backgroundColor: '#2d3436'
     },
     loginContainer:{
         marginTop: 10,
@@ -41,9 +40,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     logo: {
-        position: 'absolute',
-        width: 300,
-        height: 100
+        width: 330
     },
     title:{
         color: "#FFF",

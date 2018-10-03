@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
+
+import { Container, Header, Content, Form, Item, Input, Label } from 'native-base';
+
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet ,StatusBar} from 'react-native';
+
 import {Scene,Router, Actions} from 'react-native-router-flux';
+
 import InputComponent from '../../components/InputComponent.js';
+
+import axios from 'axios';
+
 import {
   BallIndicator,
   BarIndicator,
@@ -13,7 +21,6 @@ import {
   UIActivityIndicator,
   WaveIndicator,
 } from 'react-native-indicators';
-
 
 const onButtonPress = () => {
   Actions.HomeView();
@@ -109,25 +116,26 @@ export default class LoginForm extends Component {
     }
 
     handleChange(event) {
-      const {name, type, value} = event.nativeEvent;
-      
-      let processedData = value;
-      
-      if(type === 'text'){
-        processedData = value.toUpperCase();
-      }
-      else if (type==='number'){
-        processedData = value * 2;
-      }
-      
-      this.setState({
-        [name] : processedData
-      });
-    }
-    
-      
-    componentDidMount(){
-      this.peticionURL;
+      let target = event;
+
+      console.log(this.refs.email);
+/*      let data = {
+          client_id: 2,
+          client_secret: 'YdDDU3QNKu290Uf4qoat5FQcBiseLXrI4fJD33aw',
+          grant_type: 'password',
+          username: user.email,
+          password: user.password,
+      };
+
+      axios.post('/oauth/token', data)
+      .then(response => {
+          let responseData = response.data;
+          let now = Date.now();
+
+          responseData.expires_in = responseData.expires_in + now;
+
+          context.commit('updateTokens', responseData);
+      });*/
     }
     
     testeandoCallBack(testeo){
@@ -143,32 +151,32 @@ export default class LoginForm extends Component {
       }
     }
     
-/*      BallIndicator,
-  BarIndicator,
-  DotIndicator,
-  MaterialIndicator,
-  PacmanIndicator,
-  PulseIndicator,
-  SkypeIndicator,
-  UIActivityIndicator,
-  WaveIndicator,*/
-  
     render() {
         return (
             <View style={styles.container}>
               <View style={{display: this.state.loading===true ? 'flex' : 'none', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <PulseIndicator color="white"/>
               </View>
-              <InputComponent keyboardType={"email-address"} onChange={this.testeandoCallBack} name="email" placeholder="Email"  secureTextEntry={false}/>
-              <InputComponent onChange={this.testeandoCallBack} name="password" placeholder="Contraseña" secureTextEntry={true}/>
+
+              <Form ref="form" onSubmit={(event) => this.handleChange(event, "submit")} style={{marginBottom: 20}} onChange={(event) => this.handleChange(event)}>
+                <Item style={{marginLeft: 0, marginRight: 15, marginLeft: 15}}>
+                  <Input ref="email" keyboardType="email-address" style={{'color': '#dfdfdf', 'fontSize' : 16}} placeholderTextColor="#dfdfdf" placeholder="Email" />
+                </Item>
+
+                <Item style={{marginLeft: 0, marginRight: 15, marginLeft: 15}}>
+                  <Input ref="password" style={{'color': '#dfdfdf', 'fontSize' : 16}} keyboardType="ascii-capable" secureTextEntry={true} placeholderTextColor="#dfdfdf" placeholder="Contraseña" />
+                </Item>
+              </Form>
+
               <TouchableOpacity style={styles.buttonContainer} onPress={ () => this.peticionURL() }>
-                <Text style={styles.buttonText}>LOGIN
+                <Text style={styles.buttonText}>INGRESAR
                 </Text>
               </TouchableOpacity> 
             </View>
         );
     }
 }
+
 const styles = StyleSheet.create({
     container: {
      padding: 20

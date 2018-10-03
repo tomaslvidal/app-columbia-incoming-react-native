@@ -13,6 +13,7 @@ export default class App extends Component {
     return (
     <Router>
       <Scene key="root">
+        <Scene key="LoginContainer" component={LoginContainer} hideNavBar />
         <Scene key="HomeView" component={HomeView} hideNavBar />
         <Scene key="PollsContainer" component={PollsContainer} hideNavBar />
         <Scene key="VoucherContainer" component={VoucherContainer} hideNavBar />
