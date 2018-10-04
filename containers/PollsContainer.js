@@ -5,6 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CollapsibleList from 'react-native-collapsible-list'
 import Div from './ModelContainer/index.js';
 import Panel from '../components/PanelComponent.js';
+import Footer from '../components/Footer.js';
 import * as t from 'tcomb-form-native'
 var Form = t.form.Form;
 import * as tvalidation from 'tcomb-validation';
@@ -33,42 +34,56 @@ let options = {
 export default class PollsContainer extends Component {
   constructor(props){
     super(props);
+    
     this.state = {
     };
   }
 
   render () {
     return (
-      <Div name="Encuesta" icon="bar-chart">
-      <View style={styles.container}>
+      <View style={{display: 'flex', flex: 1}}>
         <ScrollView style={styles.container}>
-          <Panel title="Encuesta de calidad 1">
-            <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
-              <Form
-                ref="form"
-                type={Person}
-                options={options}
-              />
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </View>
-          </Panel>
-          <Panel title="Encuesta de calidad 2">
-            <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
-              <Form
-                ref="form"
-                type={Person}
-                options={options}
-              />
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </View>
-          </Panel>
+          <View style={{display: 'flex', flex: 1}}>
+            <Div name="Encuesta" icon="bar-chart" footer={false}>
+              <View style={styles.container}>
+                  <Panel title="Encuesta de calidad 1">
+                    <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
+                      <Form
+                        ref="form"
+                        type={Person}
+                        options={options}
+                      />
+
+                      <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
+                        <Text style={[styles.buttonText, {}]}>Enviar</Text>
+                      </TouchableHighlight>
+                    </View>
+                  </Panel>
+
+                  <Panel title="Encuesta de calidad 2">
+                    <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
+                      <Form
+                        ref="form"
+                        type={Person}
+                        options={options}
+                      />
+
+                      <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
+                        <Text style={[styles.buttonText, {}]}>Enviar</Text>
+                      </TouchableHighlight>
+                    </View>
+                  </Panel>
+              </View>
+            </Div>
+          </View>
+
+
         </ScrollView>
+
+        <View style={{display: 'flex'}}>
+          <Footer/>
+        </View>
       </View>
-      </Div>
     )
   }
 }
