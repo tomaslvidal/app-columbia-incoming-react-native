@@ -1,204 +1,164 @@
 import React, { Component } from 'react';
 
-import { Container, Header, Content, Form, Item, Input, Label } from 'native-base';
+import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet ,StatusBar} from 'react-native';
-
-import {Scene,Router, Actions} from 'react-native-router-flux';
-
-import InputComponent from '../../components/InputComponent.js';
+import {Actions} from 'react-native-router-flux';
 
 import axios from 'axios';
 
-import {
-  BallIndicator,
-  BarIndicator,
-  DotIndicator,
-  MaterialIndicator,
-  PacmanIndicator,
-  PulseIndicator,
-  SkypeIndicator,
-  UIActivityIndicator,
-  WaveIndicator,
-} from 'react-native-indicators';
+import { PulseIndicator } from 'react-native-indicators';
 
-const onButtonPress = () => {
-  Actions.HomeView();
+import t from 'tcomb-form-native';
+
+import _ from 'lodash';
+
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.controlLabel.normal.color = '#D8D8D8';
+
+stylesheet.textbox.normal.color = '#D8D8D8';
+
+stylesheet.textbox.error.color = '#D8D8D8';
+
+const colorError = '#E44545';
+
+stylesheet.textbox.error.borderColor = colorError;
+
+stylesheet.controlLabel.error.color = colorError;
+
+stylesheet.helpBlock.error.color = colorError;
+
+stylesheet.errorBlock.color = '#FFE6E6';
+
+const Form = t.form.Form;
+
+const User = t.struct({
+  email: t.String,
+  contraseña
+  : t.String,
+});
+
+const options = {
+  fields: {
+    email: {
+      stylesheet: stylesheet,
+      error: 'Ingresar email'
+    },
+    contraseña: {
+      stylesheet: stylesheet,
+      error: 'Ingresar contraseña',
+      secureTextEntry : true
+    },
+  },
 };
 
 export default class LoginForm extends Component {
-    constructor(props){
-      super(props);
-      
-      this.state = {
-        url: 'www.gbgviajes.com/v2/apitest/variedQuery.php',
-        form: {}
-      }
-      
-      //this.peticionURL = this.peticionURL.bind(this);
-      this.testeandoCallBack = this.testeandoCallBack.bind(this);
-    }
+  constructor(props){
+    super(props);
     
-    peticionURL(){
-      console.log("Solicitando peticion... en breves momentos");
-
-      if(this.state.form.email.value!=undefined && this.state.form.password.value!=undefined)
-      {
-        let email, password, additionURL;
-        email = this.state.form.email.value;
-        password = this.state.form.password.value;
-        additionURL = "?email="+email+"&password="+password;
-  
-        if(email!="" && password!="")
-        {
-          let completURL = "http://www.gbgviajes.com/v2/apitest/variedQuery.php"+additionURL;
-          console.log(completURL);
-          
-          this.setState({
-            loading: true
-          });
-          
-          let min, max
-          min = 15000;
-          max = 20000;
-          
-          let timeSetTimeout = Math.floor(Math.random() * (max - min)) + min;
-          
-          fetch(completURL).then(response => response.json())
-          .then(json => {
-            
-            json = json.data;
-            
-            if(json.login!=undefined)
-            {
-              if(json.login=="init"){
-                console.log("INIT");
-                
-                setTimeout( () => {
-                    Actions.HomeView();
-                  }, timeSetTimeout);
-                  
-              }
-              else if(json.login=="fail"){
-                
-                setTimeout( () => {
-                  this.setState({
-                    loading: false
-                  });
-                }, timeSetTimeout);
-                console.log("THEN - ERROR");
-              }
-            }
-            else{
-              console.log(json);
-            }
-          })
-          .catch( (data) => {
-            
-            setTimeout(() => {
-              this.setState({
-                loading: false
-              });
-            }, timeSetTimeout);
-            
-            if(json.login!=undefined)
-            {
-              if(json.login=="fail"){
-                console.log("Catch - NOTINIT");
-              }
-              else{
-                console.log("ERROR")
-              }
-            }
-          })
-        }
-      }
+    this.state = {
+      form: {},
+      loading: false
     }
+  }
 
-    handleChange(event) {
-      let target = event;
+  onButtonPress(){
+    Actions.HomeView();
+  }
 
-      console.log(this.refs.email);
-/*      let data = {
-          client_id: 2,
-          client_secret: 'YdDDU3QNKu290Uf4qoat5FQcBiseLXrI4fJD33aw',
-          grant_type: 'password',
-          username: user.email,
-          password: user.password,
+  enterAccount() {
+    const user = this.formRef.getValue();
+
+    console.log(stylesheet)
+
+    if(user!=undefined && user.email!=undefined && user.contraseña!=undefined){
+      this.setState({
+        loading: true
+      });
+
+      let data = {
+        client_id: 2,
+        client_secret: 'YdDDU3QNKu290Uf4qoat5FQcBiseLXrI4fJD33aw',
+        grant_type: 'password',
+        username: user.email,
+        password: user.contraseña,
       };
 
-      axios.post('/oauth/token', data)
+      axios.post('http://columbiaapp.eviajes.online/oauth/token', data)
       .then(response => {
           let responseData = response.data;
+
           let now = Date.now();
 
           responseData.expires_in = responseData.expires_in + now;
 
-          context.commit('updateTokens', responseData);
-      });*/
-    }
-    
-    testeandoCallBack(testeo){
-      if(Object.keys(testeo).length>=2)
-      {
-        if(testeo.name=="email" || testeo.name=="password"){
-          let form = this.state.form
-          form[testeo.name] = testeo;
-          this.setState(form, () => {
-            console.log(this.state.form);
-          })
-        }
-      }
-    }
-    
-    render() {
-        return (
-            <View style={styles.container}>
-              <View style={{display: this.state.loading===true ? 'flex' : 'none', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <PulseIndicator color="white"/>
-              </View>
+          setTimeout(() => {
+            this.setState({
+              loading: false
+            });
 
-              <Form ref="form" onSubmit={(event) => this.handleChange(event, "submit")} style={{marginBottom: 20}} onChange={(event) => this.handleChange(event)}>
-                <Item style={{marginLeft: 0, marginRight: 15, marginLeft: 15}}>
-                  <Input ref="email" keyboardType="email-address" style={{'color': '#dfdfdf', 'fontSize' : 16}} placeholderTextColor="#dfdfdf" placeholder="Email" />
-                </Item>
+            this.onButtonPress();
+          }, 4000);
 
-                <Item style={{marginLeft: 0, marginRight: 15, marginLeft: 15}}>
-                  <Input ref="password" style={{'color': '#dfdfdf', 'fontSize' : 16}} keyboardType="ascii-capable" secureTextEntry={true} placeholderTextColor="#dfdfdf" placeholder="Contraseña" />
-                </Item>
-              </Form>
-
-              <TouchableOpacity style={styles.buttonContainer} onPress={ () => this.peticionURL() }>
-                <Text style={styles.buttonText}>INGRESAR
-                </Text>
-              </TouchableOpacity> 
-            </View>
-        );
+          console.log(responseData);
+      })
+      .catch( () => {
+        this.setState({
+          loading: false
+        });
+      })
     }
+  }
+
+  render(){
+    return (
+      <View style={styles.container}>
+        <View style={[styles.divPulseIndicator, {position: this.state.loading===true ? 'absolute' : null, display: this.state.loading==true ? 'flex' : 'none'}]}>
+          <PulseIndicator size={85} color="#D8D8D8"/>
+        </View>
+
+        <View style={styles.form}>
+          <Form ref={c => this.formRef = c} type={User} options={options}/>
+
+          <TouchableOpacity style={styles.buttonContainer} onPress={ () => this.enterAccount() }>
+            <Text style={styles.buttonText}>
+              INGRESAR
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-     padding: 20
+    container:{
+      display: 'flex',
+      flex: 2,
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
-    input:{
-        height: 40,
-        backgroundColor: '#22313F',
-        marginBottom: 10,
-        padding: 10,
-        color: '#fff'
+    divPulseIndicator:{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems : 'center',
+      bottom: '45%',
+      right: '38%'
+    },
+    form:{
+      display: 'flex', 
+      flex: 1, 
+      flexDirection: 'column', 
+      justifyContent: 'center'
     },
     buttonContainer:{
-        backgroundColor: '#2980b6',
-        paddingVertical: 15
+      backgroundColor: '#0F84CD',
+      paddingVertical: 15,
+      borderRadius: 5
     },
     buttonText:{
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: '700'
-    }, 
-    loginButton:{
-      backgroundColor:  '#2980b6',
-      color: '#fff'
+      color: '#fff',
+      textAlign: 'center',
+      fontWeight: '700'
     }
 });
