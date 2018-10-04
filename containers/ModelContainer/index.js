@@ -10,11 +10,19 @@ export default class PollsContainer extends Component {
   
     return (
       <View style={[{ flex: 1, flexDirection: 'column' }, {}]}>
-        <BackLeft name={this.props.name} icon={this.props.icon} />
-        <View style={{ flex: 1 }}>
+        {
+        (this.props.backleft != undefined && this.props.backleft == false)  ? null
+        : (<BackLeft name={this.props.name} icon={this.props.icon} />)
+        }
+
+        <View style={{ display: 'flex', flex: 1 }}>
           {this.props.children}
         </View>
-        <Footer/>
+
+        {
+        (this.props.footer != undefined && this.props.footer == false)  ? null
+        : (<Footer/>)
+        }
       </View>
     );
   }
