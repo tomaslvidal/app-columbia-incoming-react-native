@@ -6,22 +6,19 @@ import {Scene,Router, Actions} from 'react-native-router-flux';
 
 export default class PanelComponent extends Component{
     constructor(props){
-        super(props);
+      super(props);
 
-        this.icons = {
-            'up'    : require('./images/arrow-up-01-24.png'),
-            'down'  : require('./images/arrow-down-01-24.png')
-        };
+      this.icons = {
+        'up'    : require('./images/arrow-up-01-24.png'),
+        'down'  : require('./images/arrow-down-01-24.png')
+      };
 
-        this.state = {
-          title       : props.title,
-          expanded    : false,
-          animation   : new Animated.Value()
-        };
-    }
-    
-    componentDidMount(){
-      this.toggle();
+      this.state = {
+        title : props.title,
+        expanded : false,
+        animation : new Animated.Value(),
+        init: true
+      };
     }
 
     toggle(){
@@ -51,7 +48,10 @@ export default class PanelComponent extends Component{
     _setMinHeight(event){
       this.setState({
         minHeight   : event.nativeEvent.layout.height
+      }, ()=>{
+        this.state.animation.setValue(this.state.minHeight);
       });
+
     }
 
     render(){
@@ -63,16 +63,18 @@ export default class PanelComponent extends Component{
 
       return(
         <Animated.View style={[styles.container,{height: this.state.animation}]}>
-          <View style={styles.titleContainer} onLayout={this._setMinHeight.bind(this)}>
+          <View ref="viewMinHeight" style={styles.titleContainer} onLayout={(e) => this._setMinHeight(e)}>
             <Text style={styles.title}>{this.state.title}</Text>
 
-            <TouchableHighlight style={styles.button} onPress={this.toggle.bind(this)} underlayColor="#f1f1f1">
-              <Image style={[styles.buttonImage, { paddingRight: 10 }]} source={icon} />
+            <TouchableHighlight style={styles.button} onPress={(e) => this.toggle(e)} underlayColor="#f1f1f1">
+              <Image style={[styles.buttonImage, {paddingRight: 10}]} source={icon} />
             </TouchableHighlight>
           </View>
 
-          <View style={styles.body} onLayout={this._setMaxHeight.bind(this)}>
-            {this.props.children}
+          <View style={styles.body} onLayout={(e) => this._setMaxHeight(e)}>
+            <View style={styles.content}>
+              {this.props.children}
+            </View>
           </View>
         </Animated.View>
       );
@@ -92,7 +94,11 @@ var styles = StyleSheet.create({
       flex: 1,
       padding: 10,
       color: '#2a2f43',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+    },
+    button:{
+      marginTop: 8,
+      marginRight: 15
     },
     buttonImage:{
       width: 30,
@@ -101,5 +107,8 @@ var styles = StyleSheet.create({
     body: {
       padding: 10,
       paddingTop: 0
+    },
+    content:{
+      padding: 8
     }
 });
