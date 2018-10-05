@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
+
 import {Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableHighlight, Linking } from 'react-native';
+
 import {Scene,Router, Actions} from 'react-native-router-flux';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import Div from './ModelContainer/index.js';
+
+import moment from 'moment';
+
 import * as t from 'tcomb-form-native'
+
 var Form = t.form.Form;
+
 import * as tvalidation from 'tcomb-validation';
+
 var validate = tvalidation.validate;
 
 var motivos = t.enums({
@@ -26,80 +34,67 @@ var vendedores = t.enums({
   3: "Silva"
 })
 
-var Person = t.struct({
-  x0: t.String,              // a required string
-  x1: t.String,  // an optional string
-  x2: t.String,               // a required number
-  x3: t.String,
-  x4: t.String,
-  x5: t.String,
-  //fechaDelReclamo: t.Date
+var types_ = t.struct({
+  nombre_y_Apellido: t.String,              // a required string
+  // apellido: t.maybe(t.String),  // an optional string
+  motivo: motivos ,               // a required number
+  descripcionDelReclamo: t.String,
+  prestadorDelServicio: t.String,
+  vendedor: vendedores,
+  fechaDelReclamo: t.Date
 });
 
 let myFormatFunction = (format,date) =>{
     return moment(date).format(format);
 }
-/*var fechaDelReclamo = {
+
+var fechaDelReclamo = {
     label: 'Fecha del reclamo',
     mode:'date',
     config:{
         format:(date) => myFormatFunction("DD MMM YYYY",date)
     }
-};*/
+};
+
 let options = {
     fields: {
-       //"fechaDelReclamo":fechaDelReclamo
+       "fechaDelReclamo":fechaDelReclamo
     }
 };
 
-export default class ClaimsContainer extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-    };
+export default class ClaimsContainer extends Component{
+  constructor(props, context){
+    super(props, context);
   }
-  
-  handleValueChange(values) {
-    this.setState({ form: values })
+
+  handleValueChange(values){
+    this.setState({ form: values });
   }
   
   onPress(){
-    var value = this.refs.form.getValue();
+    let value = this.refs.form.getValue();
   
-    if (value) { // if validation fails, value will be null
-      console.log(value); // value here is an instance of Person
-    }
-    else{
-      console.log("Fallo por las validaciones");
+    if(value){
+      console.log(value);
     }
   }
 
-  render () {
-    return (
+  render(){
+    return(
       <Div name="Formulario de Reclamos" icon="wpforms">
-        <View style={{ flexDirection: 'row', flex:1, justifyContent: 'flex-start', alignItems: 'center'}}>
-          <ScrollView contentContainerStyle={{marginTop: 'auto', marginBottom: 'auto'}}>
-            <View style={{flex: 1, justifyContent: 'space-around', padding: 8}}>
-              <Form
-                ref="form"
-                type={Person}
-                options={options}
-              />
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </View>
-          </ScrollView>
+        <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: 'white', padding: 8}}>
+            <Form ref="form" type={types_} options={options}/>
+
+            <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
+              <Text style={styles.buttonText}>Enviar</Text>
+            </TouchableHighlight>
         </View>
       </Div>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  texts: {
-    color: 'white'
-  },
   buttonText: {
     fontSize: 18,
     color: 'white',
@@ -115,6 +110,4 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center'
   }
-})
-
-
+});
