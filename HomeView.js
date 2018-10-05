@@ -15,8 +15,8 @@ const iconColor = "#1B76BC";
 export default class HomeView extends Component {
   render() {
     return (
-      <View style={{flex:1, flexDirection: 'row', backgroundColor: 'white', padding: 2, paddingBottom: 0}}>
-        <ImageBackground source={{ uri: 'https://k42.kn3.net/taringa/3/E/4/0/8/E/gonzaa9614/1B5.jpg' }} style={{flex: 1, opacity: 1}}>
+      <View style={{flex:1, flexDirection: 'row'}}>
+        <ImageBackground source={{uri: 'https://k42.kn3.net/taringa/3/E/4/0/8/E/gonzaa9614/1B5.jpg'}} style={{flex: 1, opacity: 1}}>
           <View style={[styles.container, {} ]}>
             <View style={[styles.row, { flex: 1, backgroundColor: 'transparent'}]}>
               <View style={{ flex: 2, justifyContent: 'flex-end', padding: 12 }}>
@@ -140,9 +140,8 @@ const styles = StyleSheet.create({
   viewIcon:{
     display: 'flex', 
     backgroundColor: '#EAEAEA', 
-    borderRadius: 5,
+    borderRadius: 15,
     padding: 15,
-
   },
   lineVertical:{
     height: '50%', 
@@ -165,4 +164,3 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
-
