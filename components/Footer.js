@@ -5,7 +5,7 @@ import {Scene,Router, Actions} from 'react-native-router-flux';
 export default class AssetExample extends Component {
   render() {
     return (
-          <View style={{height: 45, marginTop: 'auto', backgroundColor: '#48BBEC'}}>
+          <View style={{height: 80, marginTop: 'auto', backgroundColor: '#48BBEC'}}>
             <Image source={require('../img/footer.jpg')} style={ styles.footerImage }>
             </Image>
           </View>
