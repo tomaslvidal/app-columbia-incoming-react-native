@@ -23,14 +23,14 @@ var validate = tvalidation.validate;
 var Person = t.struct({
   '¿Lorem ipsum dolor sit amet?': t.String,
   '¿Lorem ipsum dolor sit amet2?': t.String,
-  '¿Lorem ipsum dolor sit amet3?': t.String ,
+  '¿Lorem ipsum dolor sit amet3?': t.String,
   '¿Lorem ipsum dolor sit amet4?': t.String,
   '¿Lorem ipsum dolor sit amet5?': t.String,
   '¿Lorem ipsum dolor sit amet6?': t.String,
   //fechaDelReclamo: t.Date
 });
 
-let myFormatFunction=(format,date)=>{
+let myFormatFunction = (format,date) => {
     return moment(date).format(format);
 }
 
@@ -49,24 +49,22 @@ export default class PollsContainer extends Component{
 
   render(){
     return(
-      <Div name="Encuesta" icon="bar-chart">
-        <View style={styles.container}>
-            <Panel title="Encuesta de calidad 1">
-              <Form ref="form" type={Person} options={options}/>
+      <Div name="Encuesta" icon="bar-chart" container={false}>
+        <Panel title="Encuesta de calidad 1">
+          <Form ref="form" type={Person} options={options}/>
 
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </Panel>
+          <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
+            <Text style={[styles.buttonText, {}]}>Enviar</Text>
+          </TouchableHighlight>
+        </Panel>
 
-            <Panel title="Encuesta de calidad 2">
-              <Form ref="form" type={Person} options={options}/>
+        <Panel title="Encuesta de calidad 2">
+          <Form ref="form" type={Person} options={options}/>
 
-              <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
-                <Text style={[styles.buttonText, {}]}>Enviar</Text>
-              </TouchableHighlight>
-            </Panel>
-        </View>
+          <TouchableHighlight style={styles.button} onPress={ () => this.onPress() } underlayColor='#99d9f4'>
+            <Text style={[styles.buttonText, {}]}>Enviar</Text>
+          </TouchableHighlight>
+        </Panel>
       </Div>
     );
   }
