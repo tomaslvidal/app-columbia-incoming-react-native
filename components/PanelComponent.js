@@ -4,13 +4,15 @@ import React, {Component} from 'react';
 
 import {Scene, Router, Actions} from 'react-native-router-flux';
 
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 export default class PanelComponent extends Component{
     constructor(props){
       super(props);
 
       this.icons = {
-        'up'    : require('./images/arrow-up-01-24.png'),
-        'down'  : require('./images/arrow-down-01-24.png')
+        'up'    : 'caret-up',
+        'down'  : 'caret-down'
       };
 
       this.state = {
@@ -53,28 +55,28 @@ export default class PanelComponent extends Component{
     _setMinHeight(event){
       this.setState({
         minHeight: event.nativeEvent.layout.height
-      }, () => this.state.animation.setValue(this.state.minHeight));
+      });
     }
 
     render(){
-      let icon = this.icons['down'];
+      let icon = this.icons.down;
 
       if(this.state.expanded){
-        icon = this.icons['up'];
+        icon = this.icons.up;
       }
 
       return(
-        <Animated.View style={[styles.container,{height: this.state.animation}]}>
+        <Animated.View style={[styles.container, {height: this.state.animation}]}>
           <View ref="viewMinHeight" style={styles.titleContainer} onLayout={(e) => this._setMinHeight(e)}>
             <Text style={styles.title}>{this.state.title}</Text>
 
             <TouchableHighlight style={styles.button} onPress={(e) => this.toggle(e)} underlayColor="#f1f1f1">
-              <Image style={[styles.buttonImage, {paddingRight: 10}]} source={icon} />
+              <FontAwesome5 name={icon} size={27} color={'#009EE0'} solid />
             </TouchableHighlight>
           </View>
 
           <View style={styles.body} onLayout={(e) => this._setMaxHeight(e)}>
-            <View style={styles.content}>
+            <View>
               {this.props.children}
             </View>
           </View>
@@ -84,34 +86,27 @@ export default class PanelComponent extends Component{
 }
 
 var styles = StyleSheet.create({
-    container:{
-      backgroundColor: '#fff',
-      margin: 10,
-      overflow: 'hidden'
-    },
-    titleContainer:{
-      flexDirection: 'row',
-      minHeight: 40
-    },
-    title:{
-      flex: 1,
-      padding: 10,
-      color: '#2a2f43',
-      fontWeight: 'bold',
-    },
-    button:{
-      marginTop: 8,
-      marginRight: 15
-    },
-    buttonImage:{
-      width: 30,
-      height: 25
-    },
-    body: {
-      padding: 10,
-      paddingTop: 0
-    },
-    content:{
-      padding: 8
-    }
+  container:{
+    backgroundColor: '#fff',
+    marginTop: 5,
+    marginBottom: 5,
+    overflow: 'hidden'
+  },
+  titleContainer:{
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    minHeight: 40
+  },
+  title:{
+    flex: 1,
+    color: '#2a2f43',
+    fontWeight: 'bold',
+  },
+  body: {
+    padding: 18,
+    paddingTop: 0
+  }
 });
