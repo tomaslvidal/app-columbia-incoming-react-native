@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import {Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, TouchableHighlight, Linking } from 'react-native';
 
@@ -35,17 +35,16 @@ var vendedores = t.enums({
 })
 
 var types_ = t.struct({
-  nombre_y_Apellido: t.String,              // a required string
-  // apellido: t.maybe(t.String),  // an optional string
-  motivo: motivos ,               // a required number
+  nombre_y_Apellido: t.String,
+  motivo: motivos,
   descripcionDelReclamo: t.String,
   prestadorDelServicio: t.String,
   vendedor: vendedores,
   fechaDelReclamo: t.Date
 });
 
-let myFormatFunction = (format,date) =>{
-    return moment(date).format(format);
+let myFormatFunction = (format,date) => {
+  return moment(date).format(format);
 }
 
 var fechaDelReclamo = {
@@ -57,9 +56,9 @@ var fechaDelReclamo = {
 };
 
 let options = {
-    fields: {
-       "fechaDelReclamo":fechaDelReclamo
-    }
+  fields: {
+     "fechaDelReclamo":fechaDelReclamo
+  }
 };
 
 export default class ClaimsContainer extends Component{
@@ -82,13 +81,11 @@ export default class ClaimsContainer extends Component{
   render(){
     return(
       <Div name="Formulario de Reclamos" icon="wpforms">
-        <View style={{flex: 1, justifyContent: 'space-between', backgroundColor: 'white', padding: 8}}>
-            <Form ref="form" type={types_} options={options}/>
+        <Form ref="form" type={types_} options={options}/>
 
-            <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
-              <Text style={styles.buttonText}>Enviar</Text>
-            </TouchableHighlight>
-        </View>
+        <TouchableHighlight style={styles.button} onPress={ (e) => this.onPress(e) } underlayColor='#99d9f4'>
+          <Text style={styles.buttonText}>Enviar</Text>
+        </TouchableHighlight>
       </Div>
     );
   }

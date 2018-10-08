@@ -6,8 +6,6 @@ import {Scene,Router, Actions} from 'react-native-router-flux';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-// const icon = ();
-
 const iconSize = 50;
 
 const iconColor = "#1B76BC";
@@ -19,7 +17,7 @@ export default class HomeView extends Component {
         <ImageBackground source={{uri: 'https://k42.kn3.net/taringa/3/E/4/0/8/E/gonzaa9614/1B5.jpg'}} style={{flex: 1, opacity: 1}}>
           <View style={[styles.container, {} ]}>
             <View style={[styles.row, { flex: 1, backgroundColor: 'transparent'}]}>
-              <View style={{ flex: 2, justifyContent: 'flex-end', padding: 12 }}>
+              <View style={{flex: 2, justifyContent: 'flex-end', padding: 12 }}>
                 <TouchableOpacity onPress={ () => Actions.PollsContainer() } style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
                     <FontAwesome5 name={'sticky-note'} size={iconSize} color={iconColor} solid />
@@ -39,7 +37,7 @@ export default class HomeView extends Component {
               </View>
               
               <View style={{flex: 2, justifyContent: 'flex-end', padding: 12 }}>
-                <TouchableOpacity onPress={ () => Linking.openURL('http://www.columbiaviajes.com.ar/contacto.php' )}style={{justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableOpacity onPress={() => Linking.openURL('http://www.columbiaviajes.com.ar/contacto.php' )} style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
                     <FontAwesome5 name={'smile-wink'} size={iconSize} color={iconColor} solid />
                   </View>
@@ -60,9 +58,11 @@ export default class HomeView extends Component {
                 </View>
 
                 <View style={[styles.circulo, styles.leftRight, styles.topBottom]}>
+
                 </View>
 
                 <View style={[styles.lineHorizontal, styles.leftRight]}>
+
                 </View>
               </View>
             </View>
@@ -84,13 +84,14 @@ export default class HomeView extends Component {
               
               <View style={{backgroundColor: 'transparent', justifyContent: 'flex-start', alignItems: 'center'}}>
                 <View style={[styles.lineVertical, {marginTop: 12}]}>
+
                 </View>
               </View>
               
               <View style={{flex: 2, padding: 12 }}>
-                <TouchableOpacity onPress={ () => Actions.ClaimsContainer() } style={{justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableOpacity onPress={() => Actions.ClaimsContainer()} style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
-                    <FontAwesome5 name={'wpforms'} size={iconSize} color={iconColor} solid/>
+                    <FontAwesome5 name={'wpforms'} size={iconSize} color={iconColor} solid />
                   </View>
 
                   <View style={{paddingTop: 6}}>
@@ -103,8 +104,8 @@ export default class HomeView extends Component {
             </View>
           </View>
           
-          <View style={[styles.row, {flex: 1, paddingTop: 5, paddingBottom: 5, justifyContent: 'center', alignItems: 'center', backgroundColor: '#E6F3FC' }]}>
-            <Image source={{ uri: 'http://www.columbiaviajes.com.ar/img/columbia-logo.png' }} style={{ resizeMode: 'contain', height: '90%', marginLeft: 50, width: '60%'}}/>
+          <View style={[styles.row, styles.viewFooter]}>
+            <Image source={{uri: 'http://www.columbiaviajes.com.ar/img/columbia-logo.png'}} style={styles.imageFooter} />
           </View>
         </ImageBackground>
       </View>
@@ -113,7 +114,7 @@ export default class HomeView extends Component {
 }
 
 const styles = StyleSheet.create({
-  container : {
+  container:{
     flex: 7,
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -121,6 +122,19 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row'
+  },
+  viewFooter:{
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: '#E6F3FC',
+    height: 85,
+    borderRadius: 1
+  },
+  imageFooter:{
+    resizeMode: 'contain', 
+    height: '100%', 
+    marginLeft: 50, 
+    width: '60%'
   },
   lineHorizontal:{
     flex: 1,
@@ -151,7 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column', 
     backgroundColor: '#bdc3c7'
   },
-  circulo: {
+  circulo:{
      width: 7,
      height: 7,
      borderRadius: 10,
