@@ -1,8 +1,8 @@
-import {StyleSheet,Text,View,Image,TouchableHighlight,Animated} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableHighlight, Animated} from 'react-native';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import {Scene,Router, Actions} from 'react-native-router-flux';
+import {Scene, Router, Actions} from 'react-native-router-flux';
 
 export default class PanelComponent extends Component{
     constructor(props){
@@ -21,10 +21,15 @@ export default class PanelComponent extends Component{
       };
     }
 
+    componentDidMount(){
+      this.state.animation.setValue(40);
+    }
+
     toggle(){
-      let initialValue    = this.state.expanded ? this.state.maxHeight + this.state.minHeight : this.state.minHeight,
-          finalValue      = this.state.expanded ? this.state.minHeight : this.state.maxHeight + this.state.minHeight;
-  
+      let initialValue = this.state.expanded ? this.state.maxHeight + this.state.minHeight : this.state.minHeight;
+
+      let finalValue = this.state.expanded ? this.state.minHeight : this.state.maxHeight + this.state.minHeight;
+
       this.setState({
         expanded : !this.state.expanded
       });
@@ -41,17 +46,14 @@ export default class PanelComponent extends Component{
     
     _setMaxHeight(event){
       this.setState({
-        maxHeight   : event.nativeEvent.layout.height
+        maxHeight: event.nativeEvent.layout.height
       });
     }
 
     _setMinHeight(event){
       this.setState({
-        minHeight   : event.nativeEvent.layout.height
-      }, ()=>{
-        this.state.animation.setValue(this.state.minHeight);
-      });
-
+        minHeight: event.nativeEvent.layout.height
+      }, () => this.state.animation.setValue(this.state.minHeight));
     }
 
     render(){
@@ -88,7 +90,8 @@ var styles = StyleSheet.create({
       overflow: 'hidden'
     },
     titleContainer:{
-      flexDirection: 'row'
+      flexDirection: 'row',
+      minHeight: 40
     },
     title:{
       flex: 1,
