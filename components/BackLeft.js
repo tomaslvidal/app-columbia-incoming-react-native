@@ -3,13 +3,6 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 import {Scene,Router, Actions} from 'react-native-router-flux';
-// import { library } from '@fortawesome/fontawesome-svg-core'
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-// import { faStroopwafel } from '@fortawesome/free-solid-svg-icons'
-
-// library.add(faStroopwafel)
 
 export default class BackLeft extends Component {
   render() {

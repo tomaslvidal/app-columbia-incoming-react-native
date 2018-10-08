@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
-import {Scene,Router, Actions} from 'react-native-router-flux';
 
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+
+import {Scene,Router, Actions} from 'react-native-router-flux';
 
 export default class DestinationBox extends Component {
   

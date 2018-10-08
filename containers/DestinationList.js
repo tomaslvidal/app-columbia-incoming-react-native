@@ -1,17 +1,25 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, ListView, TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+
+import {StyleSheet, View, ListView, TouchableOpacity} from 'react-native';
+
 import DestinationBox from './DestinationBox.js';
-import { Scene, Router, Actions } from 'react-native-router-flux';
+
+import {Scene, Router, Actions} from 'react-native-router-flux';
+
 import BackLeft from '../components/BackLeft';
+
 import Footer from '../components/Footer';
+
 import SpinnerComponent from '../components/SpinnerComponent';
 
 export default class DestinationList extends Component {
-  constructor(props) {
+  constructor(props){
     super(props);
+
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
+    
     this.state = {
       dataSource: ds,
       artists: null,
@@ -19,13 +27,13 @@ export default class DestinationList extends Component {
     };
   }
 
-  updateDataSource(data) {
+  updateDataSource(data){
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(data),
     });
   }
 
-  componentDidMount() {
+  componentDidMount(){
     setTimeout(() => {
       this.setState(
         {
@@ -67,38 +75,32 @@ export default class DestinationList extends Component {
         }
       );
     }, 1550);
-  
-
   }
 
-  handlePress(destination) {
+  handlePress(destination){
     Actions.DestinationDetail({ destination: destination });
   }
 
   render() {
     return (
       <View style={[{ flex: 1, flexDirection: 'column' }, {}]}>
-          <BackLeft />
-          <View style={[{}, (this.state.preLoading===true) ? {display: 'none'} : {display: 'flex'}]}>
+        <BackLeft />
+        <View style={[{}, (this.state.preLoading===true) ? {display: 'none'} : {display: 'flex'}]}>
           <ListView
             enableEmptySections={true}
             dataSource={this.state.dataSource}
             renderRow={destination => {
-              return (
+              return(
                 <TouchableOpacity onPress={() => this.handlePress(destination)}>
                   <DestinationBox destination={destination} />
                 </TouchableOpacity>
               );
             }}
           />
-          </View>
-          <SpinnerComponent style={ (this.state.preLoading===false) ? {display: 'none'} : {display: 'flex', paddingBottom: 50}} />
-          <Footer />
+        </View>
+        <SpinnerComponent style={ (this.state.preLoading===false) ? {display: 'none'} : {display: 'flex', paddingBottom: 50}} />
+        <Footer />
       </View>
     );
   }
 }
-
-/*const styles = StyleSheet.create({
-
-});*/

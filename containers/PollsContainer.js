@@ -68,7 +68,7 @@ export default class PollsContainer extends Component{
             </Panel>
         </View>
       </Div>
-    )
+    );
   }
 }
 
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center'
   }
-})
+});
 
 

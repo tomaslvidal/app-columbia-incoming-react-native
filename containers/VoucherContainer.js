@@ -4,14 +4,6 @@ import {Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 
-// import { library } from '@fortawesome/fontawesome-svg-core'
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-// import { faStroopwafel } from '@fortawesome/free-solid-svg-icons'
-
-// library.add(faStroopwafel)
-
 import Div from './ModelContainer/index.js';
 
 export default class VoucherContainer extends Component {
