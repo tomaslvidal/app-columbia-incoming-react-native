@@ -6,11 +6,19 @@ import {Scene,Router, Actions} from 'react-native-router-flux';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const iconSize = 50;
-
-const iconColor = "#1B76BC";
-
 export default class HomeView extends Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            config: {
+                icon: {
+                    size: 50,
+                    color: '#1B76BC'
+                }
+            }
+        }
+    }
   render() {
     return (
       <View style={{flex:1, flexDirection: 'row'}}>
@@ -20,7 +28,7 @@ export default class HomeView extends Component {
               <View style={{flex: 2, justifyContent: 'flex-end', padding: 12 }}>
                 <TouchableOpacity onPress={ () => Actions.PollsContainer() } style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
-                    <FontAwesome5 name={'sticky-note'} size={iconSize} color={iconColor} solid />
+                    <FontAwesome5 name={'sticky-note'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
                   </View>
 
                   <View style={{paddingTop: 6}}>
@@ -39,7 +47,7 @@ export default class HomeView extends Component {
               <View style={{flex: 2, justifyContent: 'flex-end', padding: 12 }}>
                 <TouchableOpacity onPress={() => Linking.openURL('http://www.columbiaviajes.com.ar/contacto.php' )} style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
-                    <FontAwesome5 name={'smile-wink'} size={iconSize} color={iconColor} solid />
+                    <FontAwesome5 name={'smile-wink'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
                   </View>
 
                   <View style={{paddingTop: 6}}>
@@ -71,7 +79,7 @@ export default class HomeView extends Component {
               <View style={{ flex: 2, padding: 12 }}>
                 <TouchableOpacity onPress={() => Actions.VoucherContainer()} style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
-                    <FontAwesome5 name={'list-alt'} size={iconSize} color={iconColor} solid />
+                    <FontAwesome5 name={'list-alt'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
                   </View>
 
                   <View style={{paddingTop: 6}}>
@@ -91,7 +99,7 @@ export default class HomeView extends Component {
               <View style={{flex: 2, padding: 12 }}>
                 <TouchableOpacity onPress={() => Actions.ClaimsContainer()} style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles.viewIcon}>
-                    <FontAwesome5 name={'wpforms'} size={iconSize} color={iconColor} solid />
+                    <FontAwesome5 name={'wpforms'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
                   </View>
 
                   <View style={{paddingTop: 6}}>
