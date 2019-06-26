@@ -1,34 +1,41 @@
-import {Scene,Router} from 'react-native-router-flux';
+import React from "react";
 
-import React, { Component } from 'react';
+import { createRootNavigator } from "./router";
 
-import HomeView from './HomeView.js';
+import { isSignedIn } from "./auth";
 
-import LoginContainer from './containers/LoginContainer';
+import { Provider } from 'react-redux';
 
-import PollsContainer from './containers/PollsContainer.js';
+import store from './store';
 
-import VoucherContainer from './containers/VoucherContainer.js';
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-import ClaimsContainer from './containers/ClaimsContainer.js';
+    this.state = {
+      signedIn: false,
+    };
+  }
 
-export default class App extends Component {
-  render() {
+  componentDidMount() {
+    isSignedIn()
+    .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
+    .catch(e => {
+        console.log(e);
+    });
+  }
 
-    return (
-    <Router>
-      <Scene key="root">
-        <Scene key="LoginContainer" component={LoginContainer} hideNavBar />
-      
-        <Scene key="HomeView" component={HomeView} hideNavBar />
+  render(){
+    const { checkedSignIn, signedIn } = this.state, Layout = createRootNavigator(signedIn);
 
-        <Scene key="PollsContainer" component={PollsContainer} hideNavBar />
+    if (!checkedSignIn) {
+      return null;
+    }
 
-        <Scene key="VoucherContainer" component={VoucherContainer} hideNavBar />
-        
-        <Scene key="ClaimsContainer" component={ClaimsContainer} hideNavBar />
-      </Scene>
-    </Router>
+    return(
+      <Provider store={store}>
+        <Layout />
+      </Provider>
     );
   }
 }

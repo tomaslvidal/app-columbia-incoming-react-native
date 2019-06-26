@@ -1,0 +1,1 @@
+export const SET_LOGUED_ACCOUNT = 'SET_LOGUED_ACCOUNT';
