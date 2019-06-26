@@ -1,4 +1,4 @@
-package com.columbiamobileincoming;
+package com.columbiaincoming;
 
 import android.app.Application;
 
