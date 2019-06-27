@@ -1,44 +1,62 @@
 import React, {Component} from 'react';
 
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import Div from 'ColumbiaIncoming/layouts/default';
 
+import axios from 'axios';
+
 import FileComponent from 'ColumbiaIncoming/components/FileComponent';
 
-export default class VoucherContainer extends Component{
-  constructor(props){
-    super(props);
-    
-    this.state = {
-    };
-  }
+export default class VoucherContainer extends Component {
+    constructor(props){
+        super(props);
+        
+        this.state = {
+        };
+    }
 
-  render(){
-    return(
-      <Div name="Voucher e Initerarios" icon='bar-chart'>
-      {
-        function(){
-          let contentFiles = [];
+    componentWillMount(){
+        axios({
+            url: '',
+            method: 'POST',
+            data: {
+                id: null
+            }
+        })
+        .then(res => {
 
-          for(i = 0; i < 5; i++){
-            contentFiles.push(<FileComponent name="Test" style={styles.fileComponent}/>);
-          }
+        })
+        .catch(res => {
 
-          return contentFiles;
-        }()
-      }
-      </Div>
-    )
-  }
+        });
+    }
+
+    render(){
+        return(
+            <Div name="Voucher e Initerarios" icon='bar-chart'>
+                {
+                    function(){
+                        let contentFiles = [];
+
+                        for(i = 0; i < 5; i++){
+                            contentFiles.push(<FileComponent name="Test" style={styles.fileComponent} />);
+                        }
+
+                        return contentFiles;
+                    }()
+                }
+            </Div>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
-  texts: {
-    color: 'white'
-  },
-  fileComponent: {
-    marginTop: 6,
-    marginBottom: 6
-  }
+    texts: {
+        color: 'white'
+    },
+    fileComponent: {
+        marginTop: 6,
+        marginBottom: 6
+    }
 });
