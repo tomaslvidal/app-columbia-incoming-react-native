@@ -1,5 +1,5 @@
 {
-	"resolver": {
-		"sourceExts": ["js", "json", "ts", "tsx", "jsx"]
-	}
+    "resolver": {
+        "sourceExts": ["js", "json", "ts", "tsx", "jsx"]
+    }
 }
