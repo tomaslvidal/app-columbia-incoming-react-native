@@ -20,7 +20,7 @@ class LoginForm extends Component {
     constructor(props){
         super(props);
 
-        this.stylesheet = merge(t.form.Form.stylesheet, {
+        this.stylesheet = merge(Form.stylesheet, {
             controlLabel: {
                 normal: {
                     color: '#D8D8D8'
