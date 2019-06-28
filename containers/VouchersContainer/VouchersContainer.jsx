@@ -13,38 +13,39 @@ export default class VoucherContainer extends Component {
         super(props);
         
         this.state = {
+            items: [],
+            loading: true
         };
     }
 
     componentWillMount(){
         axios({
-            url: '',
+            url: 'http://www.columbiaviajes.com/admin/services/api_voucherItinerario.php',
             method: 'POST',
             data: {
                 id: null
             }
         })
         .then(res => {
-
+            this.setState({
+                items: res.data,
+                loading: false
+            })
         })
-        .catch(res => {
+        .catch(e => {
+            throw e;
 
+            console.log(e);
         });
     }
 
     render(){
         return(
-            <Div name="Voucher e Initerarios" icon='bar-chart'>
+            <Div name="Voucher e Initerarios" icon='bar-chart' loading={this.state.loading}>
                 {
-                    function(){
-                        let contentFiles = [];
-
-                        for(i = 0; i < 5; i++){
-                            contentFiles.push(<FileComponent name="Test" style={styles.fileComponent} />);
-                        }
-
-                        return contentFiles;
-                    }()
+                    this.state.items.map((item, key) => {
+                        return <FileComponent key={key} name={item.title} url={item.image} style={styles.fileComponent} />
+                    })
                 }
             </Div>
         )
