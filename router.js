@@ -16,59 +16,61 @@ import DestinationDetailContainer from './containers/DestinationContainer/Detail
 
 import VouchersContainer from './containers/VouchersContainer';
 
-export const SignedOut = createStackNavigator({
-  SignIn: {
-    screen: LoginContainer
-  }
-},
-{
-  headerMode: 'none',
-  navigationOptions: {
-    headerVisible: false,
-  }
-}
+export const SignedOut = createStackNavigator(
+    {
+        SignIn: {
+            screen: LoginContainer
+        }
+    },
+    {
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
+    }
 );
 
-export const SignedIn = createStackNavigator({
-  Home: {
-    screen: HomeContainer
-  },
-  Surveys: {
-    screen: SurveysContainer
-  },
-  Tours: {
-    screen: ToursContainer
-  },
-  Vouchers: {
-    screen: VouchersContainer
-  },
-  DestinationList: {
-    screen: DestinationListContainer
-  },
-  DestinationDetail: {
-    screen: DestinationDetailContainer
-  },
-},
-{
-  headerMode: 'none',
-  navigationOptions: {
-    headerVisible: false,
-  }
-}
+export const SignedIn = createStackNavigator(
+    {
+        Home: {
+            screen: HomeContainer
+        },
+        Surveys: {
+            screen: SurveysContainer
+        },
+        Tours: {
+            screen: ToursContainer
+        },
+        Vouchers: {
+            screen: VouchersContainer
+        },
+        DestinationList: {
+            screen: DestinationListContainer
+        },
+        DestinationDetail: {
+            screen: DestinationDetailContainer
+        },
+    },
+    {
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
+    }
 );
 
 export const createRootNavigator = (signedIn = false) => {
-  return createSwitchNavigator(
-    {
-      SignedIn: {
-        screen: SignedIn
-      },
-      SignedOut: {
-        screen: SignedOut
-      }
-    },
-    {
-      initialRouteName: signedIn ? "SignedIn" : "SignedOut"
-    }
-  );
+    return createSwitchNavigator(
+        {
+            SignedIn: {
+                screen: SignedIn
+            },
+            SignedOut: {
+                screen: SignedOut
+            }
+        },
+        {
+            initialRouteName: signedIn ? "SignedIn" : "SignedOut"
+        }
+    );
 };
