@@ -14,15 +14,19 @@ import Panel from 'ColumbiaIncoming/components/PanelComponent';
 
 import MultiSelect from 'ColumbiaIncoming/components/MultiSelectComponent';
 
-import * as t from 'tcomb-form-native'
+import t from 'tcomb-form-native'
+
+import { merge } from 'lodash';
 
 import axios from 'axios';
 
 import _ from 'lodash';
 
+import parseFormData from 'json-form-data';
+
 const Form = t.form.Form;
 
-class SurveysContainer extends Component{
+class SurveysContainer extends Component {
     constructor(props){
         super(props);
 
@@ -55,8 +59,9 @@ class SurveysContainer extends Component{
         })
         
         this.state = {
-            loading: false,
-            state_surveys: {}
+            loading: true,
+            state_surveys: {},
+            forms: []
         };
 
         this.onPress = this.onPress.bind(this);
@@ -64,66 +69,94 @@ class SurveysContainer extends Component{
 
     componentWillMount(){
         axios({
-            url: '',
-            method: 'POST'
+            method: 'GET',
+            url: 'http://www.columbiaviajes.com/admin/services/api_encuestas.php'
         })
-        axios.get('http://columbiaapp.eviajes.online/api/surveys/user', { headers: {"Authorization" : `Bearer ${this.props.access_token}`} })
-        .then(response => {
-            let items = response.data, forms = [];
+        .then(res => res.data)
+        .then(res => {
+            let surveys = res.filter((item, index, array) => array.findIndex(item2 => item2.id_encuesta == item.id_encuesta) === index ), forms = [];
 
-            for(i = 0; i < items.length; i++){
+            surveys = surveys.map(item => {
+                return({
+                    estado: item.estado,
+                    fecha_creacion: item.fecha_creacion,
+                    id_encuesta: item.id_encuesta,
+                    nombre: item.nombre,
+                    preguntas: res.filter((item2, index2, array2) => item2.id_encuesta === item.id_encuesta).map(item3 => {
+                        return({
+                            id_pregunta: item3.id_pregunta,
+                            nombre: '22d',
+                            tipo: item3.tipo,
+                            respuestas: res.filter(item4 => item4.id_pregunta === item3.id_pregunta).map(item4_m => {
+                                return({
+                                    respuesta: item4_m.respuesta,
+                                    id_respuesta: item4_m.id_respuesta
+                                });
+                            }).sort((a, b) => a.id_respuesta > b.id_respuesta ? 1 : (a.id_respuesta == b.id_respuesta ? 0 : -1) )
+                        })
+                    }).filter((item, index, array) => array.findIndex(item2 => item2.id_pregunta == item.id_pregunta) === index).sort((a, b) => a.id_pregunta > b.id_pregunta ? 1 : (a.id_pregunta == b.id_pregunta ? 0 : -1) )
+                });
+            });
+
+            for(i = 0; i < surveys.length; i++){
                 forms[i] = {
-                    id: items[i].id,
-                    name: items[i].name,
+                    id: surveys[i].id_encuesta,
+                    name: surveys[i].nombre,
                     types: {},
                     options: {
-                    fields: {}
+                        fields: {}
                     }
                 }
 
-                for (var d = 0; d < items[i].survey_fields.length; d++){
+                for(let d = 0; d < surveys[i].preguntas.length; d++){
                     let item_options = {};
 
-                    if(items[i].survey_fields[d].type.toString() == "2"){
-                        for (var f = 0; f < items[i].survey_fields[d].survey_options.length; f++) {
-                            item_options[items[i].survey_fields[d].survey_options[f].id] = items[i].survey_fields[d].survey_options[f].value;
+                    if(surveys[i].preguntas[d].tipo === "2"){
+                        for (let f = 0; f < surveys[i].preguntas[d].respuestas.length; f++) {
+                            item_options[surveys[i].preguntas[d].respuestas[f].id_respuesta] = surveys[i].preguntas[d].respuestas[f].respuesta;
                         }
 
-                        forms[i].options.fields[items[i].survey_fields[d].id] = {
-                            label: items[i].survey_fields[d].name,
+                        forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
+                            label: surveys[i].preguntas[d].nombre,
                             stylesheet: this.stylesheet,
+                            optionsx: item_options,
                             transformer: {
-                            format: value => (value!="" ? value : null),
-                            parse: value => [value] || null,
+                                format: value => {
+                                    return(value !== '' ? value : null)
+                                },
+                                parse: value => {
+                                    return value || null;
+                                }
                             },
                         };
 
-                        forms[i].types[items[i].survey_fields[d].id] = t.enums(item_options);
+                        forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.enums(item_options);
                     }
-                    else if(items[i].survey_fields[d].type.toString() == "1"){
-                        forms[i].options.fields[items[i].survey_fields[d].id] = {
-                            label: items[i].survey_fields[d].name,
+                    else if(surveys[i].preguntas[d].tipo === "1"){
+                        forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
+                            label: surveys[i].preguntas[d].nombre,
                             stylesheet: this.stylesheet,
                             factory: MultiSelect,
                             options: [],
                         };
 
-                        for (var f = 0; f < items[i].survey_fields[d].survey_options.length; f++) {
-                            forms[i].options.fields[items[i].survey_fields[d].id].options.push({
-                            value: items[i].survey_fields[d].survey_options[f].id,
-                            text: items[i].survey_fields[d].survey_options[f].value
+                        for(let f = 0; f < surveys[i].preguntas[d].respuestas.length; f++) {
+                            forms[i].options.fields[surveys[i].preguntas[d].id_pregunta].options.push({
+                                value: surveys[i].preguntas[d].respuestas[f].id_respuesta,
+                                text: surveys[i].preguntas[d].respuestas[f].respuesta
                             });
                         }
 
-                        forms[i].types[items[i].survey_fields[d].id] = t.list(t.String);
+                        forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.list(t.String);
                     }
-                    else if(items[i].survey_fields[d].type.toString() == "3"){
-                        forms[i].options.fields[items[i].survey_fields[d].id] = {
-                            label: items[i].survey_fields[d].name,
+                    else if(surveys[i].preguntas[d].tipo === "3"){
+                        forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
+                            label: surveys[i].preguntas[d].nombre,
+                            id_respuesta: surveys[i].preguntas[d].respuestas[0].id_respuesta,
                             stylesheet: this.stylesheet,
                         };
 
-                        forms[i].types[items[i].survey_fields[d].id] = t.String;
+                        forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.String;
                     }
                 }
 
@@ -132,18 +165,13 @@ class SurveysContainer extends Component{
 
             this.setState({
                 forms: forms,
-                run: true
+                loading: false
             });
-        })
-        .catch(res => {
-            this.props.navigation.replace('Home');
-            
-            this.props.navigation.navigate('SignIn_', {routeName: this.props.navigation.state.routeName});
         });
     }
 
-    onPress(id){
-        let data = this.refs["form"+id].getValue();
+    onPress(item_param){
+        let data = this.refs["form"+item_param.id].getValue();
 
         if(data){
             this.setState({
@@ -152,18 +180,60 @@ class SurveysContainer extends Component{
 
             data = JSON.parse(JSON.stringify(data));
 
-            data.id = id;
-
             axios({
-                url: 'http://www.columbiaviajes.com/admin/services/api_encuestas_realizadas.php',
                 method: 'POST',
-                data
+                url: 'http://www.columbiaviajes.com/admin/encuestas/test.php',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: parseFormData({
+                    encuesta_id: item_param.id,
+                    agencia_id: 32,
+                    preguntas: Object.keys(data).map((k) => {
+                        let key = k;
+
+                        let item = data[key];
+
+                        return({
+                            encuesta_pregunta_id: key,
+                            encuesta_pregunta_text: item_param.options.fields[key].label,
+                            respuestas: ((item) => {
+                                if(item instanceof Array){
+                                    return item.map(item2 => {
+                                        return({
+                                            encuesta_respuesta_id: item2,
+                                            encuesta_respuesta_text: item_param.options.fields[key].options.filter(item => item.value === item2)[0].text
+                                        })
+                                    })
+                                }
+                                else{
+                                    if(typeof item_param.options.fields[key].optionsx !== "undefined"){
+                                        return([
+                                            {
+                                                encuesta_respuesta_id: item,
+                                                encuesta_respuesta_text: item_param.options.fields[key].optionsx[item]
+                                            }
+                                        ])
+                                    }
+                                    else{
+                                        return([
+                                            {
+                                                encuesta_respuesta_id: item_param.options.fields[key].id_respuesta,
+                                                encuesta_respuesta_text: item
+                                            }
+                                        ])
+                                    }
+                                }
+                            })(item)
+                        });
+                    })
+                })
             })
             .then(response => {
                 setTimeout(() => {
                     this.setState({
                         state_surveys: {
-                            [id]: true
+                            [item_param.id]: true
                         },
                         loading: false
                     });
@@ -185,7 +255,7 @@ class SurveysContainer extends Component{
 
     render(){
         return(
-            <Div name="Encuestas" icon='bar-chart' container={false} loading={!this.state.run || this.state.loading}>
+            <Div name="Encuestas" icon='bar-chart' container={false} loading={this.state.loading}>
             {
                 this.state.forms.map( (item, key) => {
                     if(!this.state.state_surveys[item.id]){
@@ -196,7 +266,7 @@ class SurveysContainer extends Component{
                                 <TouchableHighlight 
                                     key={key+"th"}
                                     style={styles.button}
-                                    onPress={() => this.onPress(item.id)}
+                                    onPress={() => this.onPress(item)}
                                     underlayColor={attributes.underlayColor}
                                 >
                                     <Text 
