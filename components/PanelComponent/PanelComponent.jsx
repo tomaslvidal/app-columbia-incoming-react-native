@@ -34,7 +34,7 @@ export default class PanelComponent extends Component{
             Animated.spring(
                 this.state.animation,
                 {
-                    toValue: finalValue + (this.state.expanded ? 11 : 0)
+                    toValue: finalValue + (this.state.expanded ? 42 : 0)
                 }
             ).start();
         });
@@ -66,8 +66,10 @@ export default class PanelComponent extends Component{
                     </TouchableHighlight>
 
                     <View style={styles.body} >
-                        <View style={styles.parent} onLayout={e => this._setMaxHeight(e)}>
-                            {this.props.children}
+                        <View style={styles.parent} >
+                            <View onLayout={e => this._setMaxHeight(e)}>
+                                {this.props.children}
+                            </View>
                         </View>
                     </View>
                 </Animated.View>
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor: '#f8f8f8',
         marginTop: 5,
-        marginBottom: 22,
+        marginBottom: 15,
         overflow: 'hidden',
         borderColor: '#e9e9e9e1',
         borderWidth: 1
@@ -108,6 +110,6 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 3,
         borderColor: '#e9e9e9e1',
-        borderWidth: 1
+        borderWidth: 1,
     }
 });
