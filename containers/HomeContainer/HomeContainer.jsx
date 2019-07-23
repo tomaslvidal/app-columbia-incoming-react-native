@@ -191,8 +191,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         alignItems: 'center',
-        width: '78%',
-        height: '78%'
+        width: '90%',
+        height: '75%'
     },
     lineVertical:{
         height: '89%',
