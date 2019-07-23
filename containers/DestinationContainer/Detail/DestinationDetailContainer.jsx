@@ -21,7 +21,7 @@ export default class DestinationDetail extends Component {
             maxWidth: 0,
             config: {
                 map_static: {
-                    size: '293x190',
+                    size: '195',
                     zoom: 15,
                     language: 'es-419',
                     marker: {
@@ -60,7 +60,7 @@ export default class DestinationDetail extends Component {
     }
 
     generateLink(){
-        return `https://maps.googleapis.com/maps/api/staticmap?center=${this.state.item.position.lat}+${this.state.item.position.lng}&zoom=${this.state.config.map_static.zoom}&language=${this.state.config.map_static.language}&size=${this.state.config.map_static.size}&maptype=roadmap&key=${this.state.config.google.key}&markers=size:${this.state.config.map_static.marker.size}%7Ccolor:${this.state.config.map_static.marker.color}%7Clabel:${this.state.config.map_static.marker.label}%7C${this.state.item.position.lat}+${this.state.item.position.lng}`;
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${this.state.item.position.lat}+${this.state.item.position.lng}&zoom=${this.state.config.map_static.zoom}&language=${this.state.config.map_static.language}&size=${parseInt(this.state.maxWidth-25)}x${this.state.config.map_static.size-10}&maptype=roadmap&key=${this.state.config.google.key}&markers=size:${this.state.config.map_static.marker.size}%7Ccolor:${this.state.config.map_static.marker.color}%7Clabel:${this.state.config.map_static.marker.label}%7C${this.state.item.position.lat}+${this.state.item.position.lng}`;
     }
 
     componentDidMount(){
@@ -92,21 +92,26 @@ export default class DestinationDetail extends Component {
                 </View>
 
                 <View style={styles.box}>
-                    <Image
-                        source={{ uri: this.generateLink() }}
-                        style={{
-                            height: 195,
-                            width: '100%',
-                        }}
-                        indicatorProps={{
-                            size: 80,
-                            key: 'asd',
-                            borderWidth: 0,
-                            color: 'rgba(150, 150, 150, 1)',
-                            unfilledColor: 'rgba(200, 200, 200, 0.2)'
-                        }}
-                        indicator={Progress}
-                    />
+                    {
+                        this.maxWidth !== 0 ?
+                        <Image
+                            source={{ uri: this.generateLink() }}
+                            style={{
+                                height: 195,
+                                width: '100%',
+                                marginBottom: 10
+                            }}
+                            indicatorProps={{
+                                size: 80,
+                                key: 'asd',
+                                borderWidth: 0,
+                                color: 'rgba(150, 150, 150, 1)',
+                                unfilledColor: 'rgba(200, 200, 200, 0.2)'
+                            }}
+                            indicator={Progress}
+                        />
+                        : null
+                    }
 
                     <Text style={styles.textTitle}>{this.state.item.title}</Text>
 
