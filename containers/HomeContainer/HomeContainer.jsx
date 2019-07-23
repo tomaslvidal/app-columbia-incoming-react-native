@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 
 import {Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import FooterComponent from 'ColumbiaIncoming/components/FooterComponent';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+import { faStickyNote, faListAlt } from '@fortawesome/free-solid-svg-icons';
+
+import { faWpforms, faWhatsappSquare } from '@fortawesome/free-brands-svg-icons';
+
+library.add(faStickyNote, faWpforms, faListAlt, faWhatsappSquare);
 
 export default class HomeView extends Component {
     constructor(props){
@@ -29,13 +37,13 @@ export default class HomeView extends Component {
                             <View style={{flex: 2, justifyContent: 'flex-end', padding: 12}}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Surveys') } style={{justifyContent: 'center', alignItems: 'center'}}>
                                     <View style={styles.viewIcon}>
-                                        <FontAwesome5 name={'sticky-note'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
+                                        <FontAwesomeIcon size={this.state.config.icon.size} color={this.state.config.icon.color} icon={['fas', 'sticky-note']} />
 
-                                    <View style={{paddingTop: 6}}>
-                                        <Text style={styles.text}>
-                                            {`Encuestas`}
-                                        </Text>
-                                    </View>
+                                        <View style={{paddingTop: 6}}>
+                                            <Text style={styles.text}>
+                                                {`Encuestas`}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -46,22 +54,22 @@ export default class HomeView extends Component {
                             </View>
                             
                             <View style={{flex: 2, justifyContent: 'flex-end', padding: 12}}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Tours') } style={{justifyContent: 'center', alignItems: 'center'}}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Tours') } style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <View style={styles.viewIcon}>
-                                        <FontAwesome5 name={'list-alt'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
+                                        <FontAwesomeIcon size={this.state.config.icon.size} color={this.state.config.icon.color} icon={['fas', 'list-alt']} />
 
-                                    <View style={{paddingTop: 6}}>
-                                        <Text style={styles.text}>
-                                            {`Tours Opciones`}
-                                        </Text>
-                                    </View>
+                                        <View style={{paddingTop: 6}}>
+                                            <Text style={styles.text}>
+                                                {`Tours Opciones`}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         </View>
                         
                         <View style={[styles.row, {justifyContent: 'center'}]}>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                                 <View style={[styles.lineHorizontal, styles.leftRight]}>
 
                                 </View>
@@ -76,31 +84,31 @@ export default class HomeView extends Component {
                             </View>
                         </View>
                         
-                        <View style={[styles.row, {flex:1, backgroundColor: 'transparent'}]}>
+                        <View style={[styles.row, { flex:1, backgroundColor: 'transparent' }]}>
                             <View style={{ flex: 2, padding: 12 }}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Vouchers')} style={{justifyContent: 'center', alignItems: 'center'}}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Vouchers')} style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <View style={styles.viewIcon}>
-                                        <FontAwesome5 name={'list-alt'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
+                                        <FontAwesomeIcon size={this.state.config.icon.size} color={this.state.config.icon.color} icon={['fas', 'list-alt']} />
 
-                                    <View style={{paddingTop: 6}}>
-                                        <Text style={styles.text}>
-                                            {`Vouchers\n e Itinerario`}
-                                        </Text>
-                                    </View>
+                                        <View style={{paddingTop: 6}}>
+                                            <Text style={styles.text}>
+                                                {`Vouchers\n e Itinerario`}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                             
-                            <View style={{backgroundColor: 'transparent', justifyContent: 'flex-start', alignItems: 'center'}}>
+                            <View style={{ backgroundColor: 'transparent', justifyContent: 'flex-start', alignItems: 'center' }}>
                                 <View style={[styles.lineVertical, {marginTop: 12}]}>
 
                                 </View>
                             </View>
                             
                             <View style={{flex: 2, padding: 12 }}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DestinationList')} style={{justifyContent: 'center', alignItems: 'center'}}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DestinationList')} style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <View style={styles.viewIcon}>
-                                        <FontAwesome5 name={'wpforms'} size={this.state.config.icon.size} color={this.state.config.icon.color} solid />
+                                        <FontAwesomeIcon size={this.state.config.icon.size} color={this.state.config.icon.color} icon={['fab', 'wpforms']} />
 
                                         <View style={{paddingTop: 6}}>
                                             <Text style={styles.text}>
@@ -114,10 +122,10 @@ export default class HomeView extends Component {
                         </View>
                     </View>
 
-                    <View style={{paddingTop: 5, paddingBottom: 5, minWidth: '100%', justifyContent: 'center', borderRadius: 8, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, flexDirection: 'row', alignSelf: 'center', backgroundColor: '#2D2D2D'}}>
-                        <FontAwesome5 name={'whatsapp-square'} size={this.state.config.icon.size} color={'#25D366'} solid />
+                    <View style={{ paddingTop: 5, paddingBottom: 5, minWidth: '100%', justifyContent: 'center', borderRadius: 8, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, flexDirection: 'row', alignSelf: 'center', alignItems: 'center', backgroundColor: '#2D2D2DE0' }}>
+                        <FontAwesomeIcon size={this.state.config.icon.size-10} color="#25D366" icon={['fab', 'whatsapp-square']} />
 
-                        <Text style={{marginLeft: 10, color: '#F7F7F7', fontSize: 17, textAlignVertical: 'center', fontWeight: '500'}}>
+                        <Text style={{ marginLeft: 10, color: '#F7F7F7', fontSize: 16, textAlignVertical: 'center', fontWeight: '500' }}>
                             +54 9 11 3525-8562
                         </Text>
                     </View>
@@ -183,8 +191,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         alignItems: 'center',
-        width: '100%',
-        height: '76%'
+        width: '78%',
+        height: '78%'
     },
     lineVertical:{
         height: '89%',
