@@ -1,5 +1,7 @@
 import React from "react";
 
+import { SafeAreaView } from 'react-native';
+
 import { createRootNavigator } from "./router";
 
 import { isSignedIn } from "./auth";
@@ -8,7 +10,9 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 
-import { AsyncStorage } from "react-native";
+import { createAppContainer } from 'react-navigation';
+
+console.disableYellowBox = true;
 
 export default class App extends React.Component {
     constructor(props) {
@@ -27,7 +31,11 @@ export default class App extends React.Component {
     }
 
     render(){
-        const { checkedSignIn, signedIn } = this.state, Layout = createRootNavigator(true);
+        const { checkedSignIn, signedIn } = this.state;
+        
+        const AppNavigator = createRootNavigator(true);
+
+        const AppContainer = createAppContainer(AppNavigator);
 
         if(!checkedSignIn) {
             return null;
@@ -35,7 +43,9 @@ export default class App extends React.Component {
 
         return(
             <Provider store={store}>
-                <Layout />
+                <SafeAreaView style={{ flex: 1, backgroundColor: '#2CAEE6' }} forceInset={{ top: 'always', bottom:'always' }}>
+                    <AppContainer />
+                </SafeAreaView>
             </Provider>
         );
     }

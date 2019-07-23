@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export const USER_KEY = "columbia";
 
@@ -22,7 +22,7 @@ export const isSignedIn = () => {
         AsyncStorage.getItem(USER_KEY)
         .then(res => {
             if(res !== null){
-                resolve(true);
+                resolve(res);
             }
             else{
                 resolve(false);
