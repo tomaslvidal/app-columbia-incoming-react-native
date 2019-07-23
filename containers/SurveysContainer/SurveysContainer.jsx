@@ -85,7 +85,7 @@ class SurveysContainer extends Component {
                     preguntas: res.filter((item2, index2, array2) => item2.id_encuesta === item.id_encuesta).map(item3 => {
                         return({
                             id_pregunta: item3.id_pregunta,
-                            nombre: '22d',
+                            nombre: item3.pregunta_text,
                             tipo: item3.tipo,
                             respuestas: res.filter(item4 => item4.id_pregunta === item3.id_pregunta).map(item4_m => {
                                 return({
@@ -122,7 +122,7 @@ class SurveysContainer extends Component {
                             optionsx: item_options,
                             transformer: {
                                 format: value => {
-                                    return(value !== '' ? value : null)
+                                    return(typeof value !== "undefined" ? value : '');
                                 },
                                 parse: value => {
                                     return value || null;
