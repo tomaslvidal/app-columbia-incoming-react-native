@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View, ListView, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, FlatList, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 
 import DestinationBox from '../../../components/DestinationBoxComponent'
 
@@ -12,19 +12,10 @@ class DestinationList extends Component {
     constructor(props){
         super(props);
 
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
         this.state = {
-            dataSource: ds,
             items: [],
             loading: true
         };
-    }
-
-    updateDataSource(data){
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(data)
-        })
     }
 
     componentDidMount(){
@@ -33,8 +24,6 @@ class DestinationList extends Component {
             this.setState({
                 items: res.data,
                 loading: false
-            }, () => {
-                this.updateDataSource(this.state.items);
             });
         });
     }
@@ -51,16 +40,14 @@ class DestinationList extends Component {
     render() {
         return (
             <Div name="Destinos" icon="wpforms" loading={this.state.loading}>
-                <ListView
-                    enableEmptySections={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={ item => {
-                        return(
-                            <TouchableOpacity onPress={ () => this.handlePress(item) }>
-                                <DestinationBox item={item}/>
-                            </TouchableOpacity>
-                        );
-                    }}
+                <FlatList
+                    data={this.state.items}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={ ({item}) => (
+                        <TouchableOpacity onPress={ () => this.handlePress(item) }>
+                            <DestinationBox item={item}/>
+                        </TouchableOpacity>
+                    )}
                 />
             </Div>
         );
