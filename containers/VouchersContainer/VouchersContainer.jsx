@@ -18,7 +18,7 @@ export default class VoucherContainer extends Component {
         };
     }
 
-    componentWillMount(){
+    componentDidMount(){
         axios({
             url: 'http://www.columbiaviajes.com/admin/services/api_voucherItinerario.php',
             method: 'POST',
@@ -44,7 +44,7 @@ export default class VoucherContainer extends Component {
             <Div name="Voucher e Initerarios" icon='bar-chart' loading={this.state.loading}>
                 {
                     this.state.items.map((item, key) => {
-                        return <FileComponent key={key} name={item.title} url={item.image} style={styles.fileComponent} />
+                        return <FileComponent key={key} name={item.title} url={item.url} style={styles.fileComponent} />
                     })
                 }
             </Div>
