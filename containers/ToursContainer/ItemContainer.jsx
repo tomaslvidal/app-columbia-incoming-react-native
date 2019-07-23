@@ -35,14 +35,14 @@ export default class ItemContainer extends Component{
         Linking.openURL(href);
     }
 
-    componentWillMount(){
+    componentDidMount(){
         console.log("items: ", this.props.item.image);
     }
 
     render() {
         return (
             <View>
-                <View style={{ marginLeft: -20, marginRight: -20 }}>
+                <View style={{ marginLeft: -10, marginRight: -10 }}>
                     <Image indicatorProps={{
                         size: 80,
                         key: this.props.item.image,
@@ -198,13 +198,16 @@ const styles = StyleSheet.create({
         marginBottom:'auto',
         height: 130,
         width: '100%',
-        marginTop: -27
     },
     box: {
-        backgroundColor: '#f5fcff',
+        // backgroundColor: '#f9f9f9',
+        borderTopWidth: 0.7,
+        borderColor: '#eaeaeae6',
         marginLeft: -15,
         marginRight: -15,
-        padding: 8,
-        marginBottom: 10
+        padding: 15,
+        paddingTop: 5,
+        marginBottom: 10,
+        marginTop: 15
     }
 });

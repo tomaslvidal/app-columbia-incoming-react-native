@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View, Text, StyleSheet, ListView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import Div from 'ColumbiaIncoming/layouts/default';
 
@@ -13,22 +13,14 @@ import axios from 'axios';
 export default class ToursContainer extends Component {
     constructor(props) {
         super(props)
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
         this.state = {
-            dataSource: ds,
             items: [],
             loading: true
         }
     }
 
-    updateDataSource(data){
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(data)
-        });
-    }
-
-    componentWillMount(){
+    componentDidMount(){
         axios({
             url: 'http://www.columbiaviajes.com/admin/services/api_tour.php',
             method: 'POST',
@@ -37,7 +29,6 @@ export default class ToursContainer extends Component {
             }
         })
         .then(res => {
-            console.log("x: ", res);
             this.setState({
                 items: res.data,
                 loading: false
