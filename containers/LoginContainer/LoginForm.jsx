@@ -1,3 +1,7 @@
+import { connect } from 'react-redux';
+
+import { setLoguedAccount } from "ColumbiaIncoming/actions";
+
 import React, { Component } from 'react';
 
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
@@ -51,7 +55,7 @@ class LoginForm extends Component {
             form: {
                 struct: t.struct({
                     email: t.String,
-                    password: t.String
+                    contraseña: t.String
                 }),
                 options: {
                     fields: {
@@ -59,7 +63,7 @@ class LoginForm extends Component {
                             stylesheet: this.stylesheet,
                             error: 'Ingresar email'
                         },
-                        password: {
+                        contraseña: {
                             stylesheet: this.stylesheet,
                             error: 'Ingresar contraseña',
                             secureTextEntry : true
@@ -75,25 +79,29 @@ class LoginForm extends Component {
         let user = this.formRef.getValue();
 
         if(user !== null){
-            if(typeof user.email !== "undefined" && typeof user.password !== "undefined"){
+            if(typeof user.email !== "undefined" && typeof user.contraseña !== "undefined"){
                 this.setState({
                     loading: true
                 });
 
-                axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.password}`)
+                axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.contraseña}`)
                 .then(response => {
                     setTimeout(() => {
                         if(response.data.status === 'success'){
                             this.setState({
                                 loading: false
-                            });
+                            }, () => {
+                                onSignIn()
+                                .then(() => {
+                                    this.props.navigation.navigate("SignedIn");
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                });
 
-                            onSignIn()
-                            .then(() => {
-                                this.props.navigation.navigate("SignedIn");
-                            })
-                            .catch(e => {
-                                console.log(e);
+                                console.log("x: ", response.data);
+
+                                this.props.onSetLoguedAccount(response.data);
                             });
                         }
                         else{
@@ -143,7 +151,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems : 'center',
         bottom: '45%',
-        right: '38%'
+        right: '34%'
     },
     form:{
         display: 'flex', 
@@ -163,4 +171,12 @@ const styles = StyleSheet.create({
     }
 });
 
-export default withNavigation(LoginForm);
+const mapDispathToProps = dispath => {
+  return {
+    onSetLoguedAccount: item => {
+      dispath(setLoguedAccount(item));
+    }
+  };
+};
+
+export default connect(null, mapDispathToProps)(withNavigation(LoginForm));

@@ -1,8 +1,6 @@
-import * as types from '../constants/ActionTypes';
+import * as types from 'ColumbiaIncoming/constants/ActionTypes';
 
-export const setLoggedIn = item => {
-    
-
+export const setLoguedAccount = item => {
     return({
         type: types.SET_LOGUED_ACCOUNT,
         payload: item
