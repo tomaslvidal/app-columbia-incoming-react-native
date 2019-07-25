@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+
+import Image from 'react-native-image-progress';
+
+import Progress from 'react-native-progress/Bar';
 
 export default class DestinationBox extends Component {
     constructor(props){
@@ -10,13 +14,25 @@ export default class DestinationBox extends Component {
     render(){
         return(
             <View style={[styles.boxDefault]}>
-                <ImageBackground style={[styles.imageBackground, {}]} source={ {uri: this.props.item.image} }>
+                <Image
+                    indicatorProps={{
+                        size: 100,
+                        color: 'rgba(150, 150, 150, 1)',
+                        unfilledColor: 'rgba(200, 200, 200, 0.2)'
+                    }}
+                    indicator={Progress}
+                    source={{uri: this.props.item.image}}
+                    style={{
+                        width: '100%', 
+                        height: '100%', 
+                    }}
+                >
                     <View style={{flex: 1}}>
                         <Text style={[styles.text]}>
                             {this.props.item.title}
                         </Text>
                     </View>
-                </ImageBackground>
+                </Image>
             </View>
         );
     }
