@@ -45,10 +45,6 @@ class LayoutDefault extends Component {
                         <ScrollView removeClippedSubviews={true} style={{ display: 'flex' }} ref={ (scroll_view) => { this.scroll_view = scroll_view } }>
                             <View style={[styles.childrenScrollView, { minHeight: this.state.heightParent > 0 ? this.state.heightParent : null }]}>
                                 <View style={styles.container}>
-                                    <View>
-                                        <Text>{this.props.title}</Text>
-                                    </View>
-
                                     <View style={typeof this.props.container !== 'undefined' && !this.props.container ? styles.parentContainer : [styles.propParentContainer, styles.parentContainer]}>
                                     {
                                         this.props.children
@@ -61,7 +57,7 @@ class LayoutDefault extends Component {
                                     : null
                                 }
                             </View>
-                        </ScrollView>        
+                        </ScrollView>
                     )
                 }
                 </View>

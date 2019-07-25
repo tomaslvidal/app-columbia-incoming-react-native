@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-// import { isSignedIn } from 'ColumbiaIncoming/auth';
-
-import { Text, View, Alert, StyleSheet, Image, ScrollView, ImageBackground, TouchableOpacity, TouchableHighlight, Linking } from 'react-native';
+import { Text, View, Alert, FlatList, StyleSheet, Image, ScrollView, ImageBackground, TouchableOpacity, TouchableHighlight, Linking } from 'react-native';
 
 import CollapsibleList from 'react-native-collapsible-list'
 
@@ -24,40 +22,42 @@ import _ from 'lodash';
 
 import parseFormData from 'json-form-data';
 
-const Form = t.form.Form;
+let Form = t.form.Form;
+
+let stylesheet = JSON.parse(JSON.stringify(Form.stylesheet));
+
+stylesheet = merge(stylesheet, {
+    controlLabel: {
+        normal: {
+            color: '#343434',
+            fontSize: 15,
+            fontWeight: 'bold'
+        },
+        error: {
+            color: '#E44545'
+        }
+    },
+    select: {
+        normal: {
+            color: undefined
+        }
+    },
+    textbox: {
+        normal: {
+            color: 'black'
+        }
+    },
+    helpBlock: {
+        error: {
+            color: '#E44545'
+        }
+    }
+});
 
 class SurveysContainer extends Component {
     constructor(props){
         super(props);
 
-        this.stylesheet = merge(Form.stylesheet, {
-            controlLabel: {
-                normal: {
-                    color: '#343434',
-                    fontSize: 15,
-                    fontWeight: 'bold'
-                },
-                error: {
-                    color: '#E44545'
-                }
-            },
-            select: {
-                normal: {
-                    color: undefined
-                }
-            },
-            textbox: {
-                normal: {
-                    color: 'black'
-                }
-            },
-            helpBlock: {
-                error: {
-                    color: '#E44545'
-                }
-            }
-        })
-        
         this.state = {
             loading: true,
             state_surveys: {},
@@ -67,7 +67,7 @@ class SurveysContainer extends Component {
         this.onPress = this.onPress.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
         axios({
             method: 'GET',
             url: 'http://www.columbiaviajes.com/admin/services/api_encuestas.php'
@@ -118,8 +118,8 @@ class SurveysContainer extends Component {
 
                         forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
                             label: surveys[i].preguntas[d].nombre,
-                            stylesheet: this.stylesheet,
                             optionsx: item_options,
+                            stylesheet,
                             transformer: {
                                 format: value => {
                                     return(typeof value !== "undefined" ? value : '');
@@ -135,8 +135,8 @@ class SurveysContainer extends Component {
                     else if(surveys[i].preguntas[d].tipo === "1"){
                         forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
                             label: surveys[i].preguntas[d].nombre,
-                            stylesheet: this.stylesheet,
                             factory: MultiSelect,
+                            stylesheet,
                             options: [],
                         };
 
@@ -153,7 +153,7 @@ class SurveysContainer extends Component {
                         forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
                             label: surveys[i].preguntas[d].nombre,
                             id_respuesta: surveys[i].preguntas[d].respuestas[0].id_respuesta,
-                            stylesheet: this.stylesheet,
+                            stylesheet
                         };
 
                         forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.String;
@@ -171,7 +171,7 @@ class SurveysContainer extends Component {
     }
 
     onPress(item_param){
-        let data = this.refs["form"+item_param.id].getValue();
+        let data = this["form"+item_param.id].getValue();
 
         if(data){
             this.setState({
@@ -188,7 +188,7 @@ class SurveysContainer extends Component {
                 },
                 data: parseFormData({
                     encuesta_id: item_param.id,
-                    agencia_id: 32,
+                    agencia_id: 33,
                     preguntas: Object.keys(data).map((k) => {
                         let key = k;
 
@@ -256,31 +256,34 @@ class SurveysContainer extends Component {
     render(){
         return(
             <Div name="Encuestas" icon='bar-chart' container={false} loading={this.state.loading}>
-            {
-                this.state.forms.map( (item, key) => {
-                    if(!this.state.state_surveys[item.id]){
-                        return (
-                            <Panel key={key} title={item.name}>
-                                <Form key={key+"f"} ref={"form"+item.id} type={item.types} options={item.options}/>
+                <FlatList
+                    data={this.state.forms}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={ ({item, index}) => {
+                        console.log("x: ", item)
+                        if(this.state.state_surveys[item.id]!=true) {
+                            return(
+                                <Panel key={index} title={item.name}>
+                                    <Form key={index+"f"} ref={(ref) => this["form"+item.id] = ref} type={item.types} options={item.options}/>
 
-                                <TouchableHighlight 
-                                    key={key+"th"}
-                                    style={styles.button}
-                                    onPress={() => this.onPress(item)}
-                                    underlayColor={attributes.underlayColor}
-                                >
-                                    <Text 
-                                        key={key+"t"}
-                                        style={[styles.buttonText, {}]}
+                                    <TouchableHighlight 
+                                        key={index+"th"}
+                                        style={styles.button}
+                                        onPress={() => this.onPress(item)}
+                                        underlayColor={attributes.underlayColor}
                                     >
-                                        Enviar
-                                    </Text>
-                                </TouchableHighlight>
-                            </Panel>
-                        );
-                    }
-                })
-            }
+                                        <Text 
+                                            key={index+"t"}
+                                            style={[styles.buttonText, {}]}
+                                        >
+                                            Enviar
+                                        </Text>
+                                    </TouchableHighlight>
+                                </Panel>
+                            );
+                        }
+                    }}
+                />
             </Div>
         );
     }
@@ -308,4 +311,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SurveysContainer;
+const mapStateToProps = state => {
+    return {
+        account: state.account.info.data
+    };
+};
+
+export default connect(mapStateToProps)(SurveysContainer);
