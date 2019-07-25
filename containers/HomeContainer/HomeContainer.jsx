@@ -126,7 +126,7 @@ export default class HomeView extends Component {
                         <FontAwesomeIcon size={this.state.config.icon.size-10} color="#25D366" icon={['fab', 'whatsapp-square']} />
 
                         <Text style={{ marginLeft: 10, color: '#F7F7F7', fontSize: 16, textAlignVertical: 'center', fontWeight: '500' }}>
-                            +54 9 11 3525-8562
+                            +54 9 11 5482 8853
                         </Text>
                     </View>
                     <FooterComponent />
