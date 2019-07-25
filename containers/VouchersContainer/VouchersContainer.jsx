@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 import React, {Component} from 'react';
 
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
@@ -8,7 +10,7 @@ import axios from 'axios';
 
 import FileComponent from 'ColumbiaIncoming/components/FileComponent';
 
-export default class VoucherContainer extends Component {
+class VoucherContainer extends Component {
     constructor(props){
         super(props);
         
@@ -21,9 +23,9 @@ export default class VoucherContainer extends Component {
     componentDidMount(){
         axios({
             url: 'http://www.columbiaviajes.com/admin/services/api_voucherItinerario.php',
-            method: 'POST',
-            data: {
-                id: null
+            method: 'GET',
+            params: {
+                id: this.props.account.id
             }
         })
         .then(res => {
@@ -52,6 +54,12 @@ export default class VoucherContainer extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        account: state.account.info.data
+    };
+};
+
 const styles = StyleSheet.create({
     texts: {
         color: 'white'
@@ -61,3 +69,5 @@ const styles = StyleSheet.create({
         marginBottom: 6
     }
 });
+
+export default connect(mapStateToProps)(VoucherContainer);
