@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, Linking } from 'react-native';
 
 import HTML from 'react-native-render-html';
@@ -10,14 +12,20 @@ import Progress from 'react-native-progress/Bar';
 
 import Div from '../../../layouts/default';
 
+import { withNavigation } from 'react-navigation';
+
+import { updateDestination } from "ColumbiaIncoming/actions";
+
+import axios from 'axios';
+
 const COORDINATES = {};
 
-export default class DestinationDetail extends Component {
+class DestinationDetail extends Component {
     constructor(props){
         super(props);
 
         this.state = { 
-            item: this.props.navigation.state.params.item,
+            item: this.props.destinations[this.props.navigation.state.params.key],
             maxWidth: 0,
             config: {
                 map_static: {
@@ -43,6 +51,28 @@ export default class DestinationDetail extends Component {
         this.onLinkPress = this.onLinkPress.bind(this);
 
         this.generateLink = this.generateLink.bind(this);
+
+        this.onRefresh = this.onRefresh.bind(this);
+    }
+
+    onRefresh(){
+        this.setState({
+            is_refreshing: true
+        }, () => {
+            axios.get(`http://www.columbiaviajes.com/admin/services/api_destinosMapas.php?id=${this.state.item.id}`)
+            .then(res => {
+                this.props.updateDestination({
+                    key: this.props.navigation.state.params.key,
+                    data: res.data
+                })
+                .then(() => {
+                    this.setState({
+                        is_refreshing: false,
+                        item: this.props.destinations[this.props.navigation.state.params.key]
+                    });
+                });
+            });
+        });
     }
 
     _setMaxHeight(e){
@@ -63,17 +93,9 @@ export default class DestinationDetail extends Component {
         return `https://maps.googleapis.com/maps/api/staticmap?center=${this.state.item.position.lat}+${this.state.item.position.lng}&zoom=${this.state.config.map_static.zoom}&language=${this.state.config.map_static.language}&size=${parseInt(this.state.maxWidth-25)}x${this.state.config.map_static.size-10}&maptype=roadmap&key=${this.state.config.google.key}&markers=size:${this.state.config.map_static.marker.size}%7Ccolor:${this.state.config.map_static.marker.color}%7Clabel:${this.state.config.map_static.marker.label}%7C${this.state.item.position.lat}+${this.state.item.position.lng}`;
     }
 
-    componentDidMount(){
-        setTimeout(() => {
-            console.log(this.generateLink());
-
-            console.log(this.state.item);
-        }, 3000)
-    }
-
     render() {
         return (
-        <Div ref={(ref) => this.div = ref} name="Formulario de Reclamos" icon="wpforms">
+        <Div onRefresh={this.onRefresh} is_refreshing={this.state.is_refreshing} ref={(ref) => this.div = ref} name="Formulario de Reclamos" icon="wpforms">
             <View onLayout={(e) => this._setMaxHeight(e)}>
                 <View style={{ marginLeft: -20, marginRight: -20 }}>
                     <Image 
@@ -117,7 +139,7 @@ export default class DestinationDetail extends Component {
 
                     <ScrollView 
                         removeClippedSubviews={true}
-                        ref={(scroll_view) => this.scroll_view = scroll_view}
+                        ref={ scroll_view => this.scroll_view = scroll_view}
                         style={{ flex: 1 }}>
                         <HTML 
                             imagesMaxWidth={ this.state.maxWidth ? this.state.maxWidth : null } 
@@ -153,7 +175,7 @@ export default class DestinationDetail extends Component {
                                     return(
                                         <Image 
                                             source={{ uri: parameters.src.replace('https', 'http') }}
-                                            indicator={Progress}
+                                            indicator={ Progress }
                                             resizeMethod="resize"
                                             indicatorProps={{
                                                 size: 80,
@@ -295,3 +317,9 @@ const styles = StyleSheet.create({
         padding: 5
     }
 });
+
+const mapStateToProps = state => ({
+    destinations: state.destinations.items
+});
+
+export default connect(mapStateToProps, { updateDestination })(withNavigation(DestinationDetail));

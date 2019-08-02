@@ -50,7 +50,7 @@ class DestinationList extends Component {
 
     handlePress(item){
         if(typeof item.url === 'undefined'){
-            this.props.navigation.navigate('DestinationDetail', { item: item });
+            this.props.navigation.navigate('DestinationDetail', item);
         }
         else{
             Linking.openURL(item.url)
@@ -91,7 +91,7 @@ class DestinationList extends Component {
 
     render() {
         const renderItem = ({item, index}) => (
-            <TouchableOpacity onPress={() => this.handlePress(item)}>
+            <TouchableOpacity onPress={() => this.handlePress({ key: index })}>
                 <DestinationBox item={item}/>
             </TouchableOpacity>
         );

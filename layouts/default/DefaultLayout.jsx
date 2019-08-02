@@ -58,7 +58,19 @@ class LayoutDefault extends Component {
                     (
                         <Fragment_ 
                             style={{ flex: 1}}
-                            ref={ (scroll_view) => { this.scroll_view = scroll_view } }
+                            ref={ scroll_view => { this.scroll_view = scroll_view } }
+                            refreshControl={
+                                ((self) => {
+                                    if(typeof self.props.onRefresh === "function"){
+                                        return(
+                                                <RefreshControl
+                                                    refreshing={self.props.is_refreshing}
+                                                    onRefresh={self.props.onRefresh}
+                                                />
+                                        );
+                                    }
+                                })(this)
+                            }
                         >
                             <View style={[styles.childrenScrollView, { minHeight: this.state.heightParent > 0 ? this.state.heightParent : null }]}>
                                 <View style={styles.container}>
