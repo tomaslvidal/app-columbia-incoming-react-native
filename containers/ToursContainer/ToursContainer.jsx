@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+
 import { View, Text, StyleSheet } from 'react-native';
 
 import Div from 'ColumbiaIncoming/layouts/default';
@@ -8,51 +10,74 @@ import Panel from 'ColumbiaIncoming/components/PanelComponent';
 
 import ItemContainer from './ItemContainer';
 
+import { withNavigation } from 'react-navigation';
+
+import { setTours } from "ColumbiaIncoming/actions";
+
 import axios from 'axios';
 
-export default class ToursContainer extends Component {
+class ToursContainer extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
-            items: [],
-            loading: true
-        }
+            is_refreshing: false
+        };
+
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
     componentDidMount(){
-        axios({
-            url: 'http://www.columbiaviajes.com/admin/services/api_tour.php',
-            method: 'POST',
-            data: {
-                id: null
-            }
-        })
-        .then(res => {
-            this.setState({
-                items: res.data,
-                loading: false
+        if(this.props.tours.items.length === 0){
+            axios({
+                url: 'http://www.columbiaviajes.com/admin/services/api_tour.php',
+                method: 'POST',
+                data: {
+                    id: null
+                }
+            })
+            .then(res => {
+                this.props.setTours({
+                    items: res.data,
+                    loading: false
+                });
+            })
+            .catch(e => {
+                console.log(e);
             });
-        })
-        .catch(e => {
-            throw e;
+        }
+    }
 
-            console.log(e);
-        })
+    onRefresh(){
+        this.setState({
+            is_refreshing: true
+        }, () => {
+            axios.get('http://www.columbiaviajes.com/admin/services/api_tour.php')
+            .then(res => {
+                this.props.setTours({
+                    items: res.data
+                })
+                .then(() => {
+                    this.setState({
+                        is_refreshing: false,
+                    });
+                });
+            });
+        });
     }
 
     render(){
         return (
-            <Div name="Tours" container={false} loading={this.state.loading}>
-                {
-                this.state.items.map((item, index) => {
+            <Div name="Tours" container={false} loading={this.props.tours.loading} onRefresh={this.onRefresh} is_refreshing={this.state.is_refreshing}>
+            {
+                this.props.tours.items.map((item, index) => {
                     return(
                         <Panel key={index} title={item.title}>
                             <ItemContainer key={index} item={item} />
                         </Panel>
                     );
                 })
-                }
+            }
             </Div>
         );
     }
@@ -61,3 +86,9 @@ export default class ToursContainer extends Component {
 const styles = StyleSheet.create({
     
 })
+
+const mapStateToProps = state => ({
+    tours: state.tours
+});
+
+export default connect(mapStateToProps, { setTours })(withNavigation(ToursContainer));

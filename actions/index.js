@@ -21,6 +21,13 @@ const setSurveys = item => async dispatch => {
     });
 };
 
+const setTours = item => async dispatch => {
+    dispatch({
+        type: types.SET_TOURS,
+        payload: item
+    });
+};
+
 const updateDestination = item => async dispatch => {
     dispatch({
         type: types.UPDATE_DESTINATION,
@@ -38,4 +45,4 @@ const hiddenSurveys = item => async dispatch => {
     });
 };
 
-export { setLoguedAccount, setDestinations, updateDestination, hiddenSurveys, setSurveys };
+export { setLoguedAccount, setDestinations, updateDestination, hiddenSurveys, setSurveys, setTours };
