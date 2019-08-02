@@ -71,48 +71,44 @@ class LoginForm extends Component {
                     }
                 }
             },
-            loading: false
+            loading: false,
+            pending: false
         }
     }
 
     enterAccount(){
         let user = this.formRef.getValue();
 
-        if(user){
-            this.setState({
-                loading: true
-            });
-
-            axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.contraseña}`)
-            .then(response => {
-                setTimeout(() => {
-                    if(response.data.status === 'success'){
-                        this.setState({
-                            loading: false
-                        }, () => {
-                            onSignIn()
-                            .then(() => {
-                                this.props.navigation.navigate("SignedIn");
-                            })
-                            .catch(e => {
-                                console.log(e);
-                            });
-
-                            console.log("x: ", response.data);
-
-                            this.props.onSetLoguedAccount(response.data);
-                        });
-                    }
-                    else{
-                        this.setState({
-                            loading: false
-                        });
-                    }
-                }, 1000);
-            })
-            .catch(e => {
-                console.log(e);
-            });
+        if(!this.state.loading){
+            if(user){
+                this.setState({
+                    loading: true,
+                }, () => {
+                    axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.contraseña}`)
+                    .then(response => {
+                        setTimeout(() => {
+                            if(response.data.status === 'success'){
+                                this.setState({
+                                    loading: false
+                                }, () => {
+                                    this.props.setLoguedAccount(response.data)
+                                    .then(() => {
+                                        this.props.navigation.navigate("SignedIn");
+                                    });
+                                });
+                            }
+                            else{
+                                this.setState({
+                                    loading: false
+                                });
+                            }
+                        }, 1000);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
+                });
+            }
         }
     }
 
@@ -169,12 +165,4 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapDispathToProps = dispath => {
-  return {
-    onSetLoguedAccount: item => {
-      dispath(setLoguedAccount(item));
-    }
-  };
-};
-
-export default connect(null, mapDispathToProps)(withNavigation(LoginForm));
+export default connect(null, { setLoguedAccount })(withNavigation(LoginForm));

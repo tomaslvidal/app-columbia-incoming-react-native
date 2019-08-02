@@ -1,35 +1,18 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import store from './store';
 
-export const USER_KEY = "columbia";
+store.subscribe(listener);
 
-export const onSignIn = () => {
+function listener(){
     return new Promise((resolve, reject) => {
-        try{
-            AsyncStorage.setItem(USER_KEY, true);
+        const access_token = store.getState().account;
 
+        if(access_token.info.status === 'success'){
             resolve(true);
         }
-        catch(e){
-            reject(e);
+        else{
+            resolve(false);
         }
     });
-};
+}
 
-export const onSignOut = () => AsyncStorage.removeItem(USER_KEY);
-
-export const isSignedIn = () => {
-    return new Promise((resolve, reject) => {
-        AsyncStorage.getItem(USER_KEY)
-        .then(res => {
-            if(res !== null){
-                resolve(res);
-            }
-            else{
-                resolve(false);
-            }
-        })
-        .catch(e => {
-            reject(e);
-        });
-    });
-};
+export const isSignedIn = () => listener();

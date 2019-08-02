@@ -29,7 +29,7 @@ export default class App extends React.Component {
     render(){
         const { checkedSignIn, signedIn } = this.state;
         
-        const AppNavigator = createRootNavigator(true);
+        const AppNavigator = createRootNavigator(signedIn);
 
         const AppContainer = createAppContainer(AppNavigator);
 
