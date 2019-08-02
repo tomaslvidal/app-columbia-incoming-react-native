@@ -61,109 +61,127 @@ class SurveysContainer extends Component {
         super(props);
 
         this.onPress = this.onPress.bind(this);
+
+        this.state = {
+            is_refreshing: false
+        };
+
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
-    fetchSurveys(){
-        axios({
-            method: 'GET',
-            url: `http://www.columbiaviajes.com/admin/services/api_encuestas.php?agencia_id=${this.props.account.id}`
-        })
-        .then(res => res.data)
-        .then(res => {
-            let surveys = res.filter((item, index, array) => array.findIndex(item2 => item2.id_encuesta == item.id_encuesta) === index ), forms = [];
+    fetchSurveys(is_refreshing = false){
+        this.setState({
+            is_refreshing
+        }, () => {
+            axios({
+                method: 'GET',
+                url: `http://www.columbiaviajes.com/admin/services/api_encuestas.php?agencia_id=${this.props.account.id}`
+            })
+            .then(res => res.data)
+            .then(res => {
+                let surveys = res.filter((item, index, array) => array.findIndex(item2 => item2.id_encuesta == item.id_encuesta) === index ), forms = [];
 
-            surveys = surveys.map(item => {
-                return({
-                    estado: item.estado,
-                    fecha_creacion: item.fecha_creacion,
-                    id_encuesta: item.id_encuesta,
-                    nombre: item.nombre,
-                    preguntas: res.filter((item2, index2, array2) => item2.id_encuesta === item.id_encuesta).map(item3 => {
-                        return({
-                            id_pregunta: item3.id_pregunta,
-                            nombre: item3.pregunta_text,
-                            tipo: item3.tipo,
-                            respuestas: res.filter(item4 => item4.id_pregunta === item3.id_pregunta).map(item4_m => {
-                                return({
-                                    respuesta: item4_m.respuesta,
-                                    id_respuesta: item4_m.id_respuesta
+                surveys = surveys.map(item => {
+                    return({
+                        estado: item.estado,
+                        fecha_creacion: item.fecha_creacion,
+                        id_encuesta: item.id_encuesta,
+                        nombre: item.nombre,
+                        preguntas: res.filter((item2, index2, array2) => item2.id_encuesta === item.id_encuesta).map(item3 => {
+                            return({
+                                id_pregunta: item3.id_pregunta,
+                                nombre: item3.pregunta_text,
+                                tipo: item3.tipo,
+                                respuestas: res.filter(item4 => item4.id_pregunta === item3.id_pregunta).map(item4_m => {
+                                    return({
+                                        respuesta: item4_m.respuesta,
+                                        id_respuesta: item4_m.id_respuesta
+                                    });
+                                }).sort((a, b) => a.id_respuesta > b.id_respuesta ? 1 : (a.id_respuesta == b.id_respuesta ? 0 : -1) )
+                            })
+                        }).filter((item, index, array) => array.findIndex(item2 => item2.id_pregunta == item.id_pregunta) === index).sort((a, b) => a.id_pregunta > b.id_pregunta ? 1 : (a.id_pregunta == b.id_pregunta ? 0 : -1) )
+                    });
+                });
+
+                for(i = 0; i < surveys.length; i++){
+                    forms[i] = {
+                        id: surveys[i].id_encuesta,
+                        name: surveys[i].nombre,
+                        types: {},
+                        options: {
+                            fields: {}
+                        }
+                    }
+
+                    for(let d = 0; d < surveys[i].preguntas.length; d++){
+                        let item_options = {};
+
+                        if(surveys[i].preguntas[d].tipo === "2"){
+                            for (let f = 0; f < surveys[i].preguntas[d].respuestas.length; f++) {
+                                item_options[surveys[i].preguntas[d].respuestas[f].id_respuesta] = surveys[i].preguntas[d].respuestas[f].respuesta;
+                            }
+
+                            forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
+                                label: surveys[i].preguntas[d].nombre,
+                                optionsx: item_options,
+                                stylesheet,
+                                transformer: {
+                                    format: value => {
+                                        return(typeof value !== "undefined" ? value : '');
+                                    },
+                                    parse: value => {
+                                        return value || null;
+                                    }
+                                },
+                            };
+
+                            forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.enums(item_options);
+                        }
+                        else if(surveys[i].preguntas[d].tipo === "1"){
+                            forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
+                                label: surveys[i].preguntas[d].nombre,
+                                factory: MultiSelect,
+                                stylesheet,
+                                options: [],
+                            };
+
+                            for(let f = 0; f < surveys[i].preguntas[d].respuestas.length; f++) {
+                                forms[i].options.fields[surveys[i].preguntas[d].id_pregunta].options.push({
+                                    value: surveys[i].preguntas[d].respuestas[f].id_respuesta,
+                                    text: surveys[i].preguntas[d].respuestas[f].respuesta
                                 });
-                            }).sort((a, b) => a.id_respuesta > b.id_respuesta ? 1 : (a.id_respuesta == b.id_respuesta ? 0 : -1) )
-                        })
-                    }).filter((item, index, array) => array.findIndex(item2 => item2.id_pregunta == item.id_pregunta) === index).sort((a, b) => a.id_pregunta > b.id_pregunta ? 1 : (a.id_pregunta == b.id_pregunta ? 0 : -1) )
+                            }
+
+                            forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.list(t.String);
+                        }
+                        else if(surveys[i].preguntas[d].tipo === "3"){
+                            forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
+                                label: surveys[i].preguntas[d].nombre,
+                                id_respuesta: surveys[i].preguntas[d].respuestas[0].id_respuesta,
+                                stylesheet
+                            };
+
+                            forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.String;
+                        }
+                    }
+
+                    forms[i].types = t.struct(forms[i].types);
+                }
+
+                this.setState({
+                    is_refreshing: false
+                }, () => {
+                    this.props.setSurveys({
+                        items: forms,
+                        loading: false
+                    });
                 });
             });
-
-            for(i = 0; i < surveys.length; i++){
-                forms[i] = {
-                    id: surveys[i].id_encuesta,
-                    name: surveys[i].nombre,
-                    types: {},
-                    options: {
-                        fields: {}
-                    }
-                }
-
-                for(let d = 0; d < surveys[i].preguntas.length; d++){
-                    let item_options = {};
-
-                    if(surveys[i].preguntas[d].tipo === "2"){
-                        for (let f = 0; f < surveys[i].preguntas[d].respuestas.length; f++) {
-                            item_options[surveys[i].preguntas[d].respuestas[f].id_respuesta] = surveys[i].preguntas[d].respuestas[f].respuesta;
-                        }
-
-                        forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
-                            label: surveys[i].preguntas[d].nombre,
-                            optionsx: item_options,
-                            stylesheet,
-                            transformer: {
-                                format: value => {
-                                    return(typeof value !== "undefined" ? value : '');
-                                },
-                                parse: value => {
-                                    return value || null;
-                                }
-                            },
-                        };
-
-                        forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.enums(item_options);
-                    }
-                    else if(surveys[i].preguntas[d].tipo === "1"){
-                        forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
-                            label: surveys[i].preguntas[d].nombre,
-                            factory: MultiSelect,
-                            stylesheet,
-                            options: [],
-                        };
-
-                        for(let f = 0; f < surveys[i].preguntas[d].respuestas.length; f++) {
-                            forms[i].options.fields[surveys[i].preguntas[d].id_pregunta].options.push({
-                                value: surveys[i].preguntas[d].respuestas[f].id_respuesta,
-                                text: surveys[i].preguntas[d].respuestas[f].respuesta
-                            });
-                        }
-
-                        forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.list(t.String);
-                    }
-                    else if(surveys[i].preguntas[d].tipo === "3"){
-                        forms[i].options.fields[surveys[i].preguntas[d].id_pregunta] = {
-                            label: surveys[i].preguntas[d].nombre,
-                            id_respuesta: surveys[i].preguntas[d].respuestas[0].id_respuesta,
-                            stylesheet
-                        };
-
-                        forms[i].types[surveys[i].preguntas[d].id_pregunta] = t.String;
-                    }
-                }
-
-                forms[i].types = t.struct(forms[i].types);
-            }
-
-            this.props.setSurveys({
-                items: forms,
-                loading: false
-            });
         });
+    }
+
+    onRefresh(){
+        this.fetchSurveys(true);
     }
 
     componentDidMount(){
@@ -259,7 +277,7 @@ class SurveysContainer extends Component {
 
     render(){
         return(
-            <Div name="Encuestas" icon='bar-chart' container={false} loading={this.props.surveys.loading}>
+            <Div onRefresh={this.onRefresh} is_refreshing={this.state.is_refreshing} name="Encuestas" icon='bar-chart' container={false} loading={this.props.surveys.loading}>
                 <FlatList
                     data={this.props.surveys.items}
                     keyExtractor={(item, index) => index.toString()}
