@@ -8,9 +8,12 @@ import surveysReducer from './surveys';
 
 import toursReducer from './tours';
 
+import vouchersReducer from './vouchers';
+
 export default combineReducers({
     account: accountReducer,
     destinations: destinationsReducer,
     surveys: surveysReducer,
-    tours: toursReducer
+    tours: toursReducer,
+    vouchers: vouchersReducer
 });
