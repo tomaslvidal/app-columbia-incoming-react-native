@@ -20,6 +20,8 @@ import axios from 'axios';
 
 import _ from 'lodash';
 
+import { setSurveys, hiddenSurveys } from 'ColumbiaIncoming/actions';
+
 import parseFormData from 'json-form-data';
 
 let Form = t.form.Form;
@@ -58,19 +60,13 @@ class SurveysContainer extends Component {
     constructor(props){
         super(props);
 
-        this.state = {
-            loading: true,
-            state_surveys: {},
-            forms: []
-        };
-
         this.onPress = this.onPress.bind(this);
     }
 
-    componentDidMount(){
+    fetchSurveys(){
         axios({
             method: 'GET',
-            url: 'http://www.columbiaviajes.com/admin/services/api_encuestas.php'
+            url: `http://www.columbiaviajes.com/admin/services/api_encuestas.php?agencia_id=${this.props.account.id}`
         })
         .then(res => res.data)
         .then(res => {
@@ -163,18 +159,24 @@ class SurveysContainer extends Component {
                 forms[i].types = t.struct(forms[i].types);
             }
 
-            this.setState({
-                forms: forms,
+            this.props.setSurveys({
+                items: forms,
                 loading: false
             });
         });
+    }
+
+    componentDidMount(){
+        if(this.props.surveys.items.length === 0){
+            this.fetchSurveys();
+        }
     }
 
     onPress(item_param){
         let data = this["form"+item_param.id].getValue();
 
         if(data){
-            this.setState({
+            this.props.setSurveys({
                 loading: true
             });
 
@@ -231,16 +233,18 @@ class SurveysContainer extends Component {
             })
             .then(response => {
                 setTimeout(() => {
-                    this.setState({
-                        state_surveys: {
-                            [item_param.id]: true
-                        },
-                        loading: false
-                    });
-
-                    Alert.alert('Mensaje', 'Encuesta realizada', [
-                        {text: 'OK'}
-                    ]);
+                    this.hiddenSurveys({
+                        [item_param.id]: true
+                    })
+                    .then(() => {
+                        this.props.setSurveys({
+                            loading: false
+                        }, () => {
+                            Alert.alert('Mensaje', 'Encuesta realizada', [
+                                {text: 'OK'}
+                            ]);
+                        });
+                    })
                 }, 1500);
             })
             .catch( e => {
@@ -255,13 +259,12 @@ class SurveysContainer extends Component {
 
     render(){
         return(
-            <Div name="Encuestas" icon='bar-chart' container={false} loading={this.state.loading}>
+            <Div name="Encuestas" icon='bar-chart' container={false} loading={this.props.surveys.loading}>
                 <FlatList
-                    data={this.state.forms}
+                    data={this.props.surveys.items}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={ ({item, index}) => {
-                        console.log("x: ", item)
-                        if(this.state.state_surveys[item.id]!=true) {
+                        if(!this.props.surveys.hiddens[item.id]) {
                             return(
                                 <Panel key={index} title={item.name}>
                                     <Form key={index+"f"} ref={(ref) => this["form"+item.id] = ref} type={item.types} options={item.options}/>
@@ -313,8 +316,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        account: state.account.info.data
+        account: state.account.info.data,
+        surveys: state.surveys
     };
 };
 
-export default connect(mapStateToProps)(SurveysContainer);
+export default connect(mapStateToProps, { setSurveys, hiddenSurveys })(SurveysContainer);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Text, StatusBar, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Linking, ScrollView } from 'react-native';
+import { Text, StatusBar, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Linking, ScrollView, RefreshControl } from 'react-native';
 
 import BackLeft from 'ColumbiaIncoming/components/BackLeftComponent';
 
@@ -8,7 +8,17 @@ import Footer from 'ColumbiaIncoming/components/FooterComponent';
 
 import Preloader from 'ColumbiaIncoming/components/PreloaderComponent';
 
+import PropTypes from 'prop-types';
+
 class LayoutDefault extends Component {
+    static propTypes = {
+        state_scroll_view: PropTypes.bool,
+    }
+
+    static defaultProps = {
+        state_scroll_view: true,
+    }
+
     constructor(props){
         super(props);
 
@@ -25,6 +35,8 @@ class LayoutDefault extends Component {
     }
 
     render(){
+        const Fragment_ = this.props.state_scroll_view ? ScrollView : View;
+
         return(
             <View style={[{ flex: 1, flexDirection: 'column' }, {}]}>
                 <StatusBar backgroundColor='#2CAEE6' barStyle='light-content' />
@@ -32,7 +44,9 @@ class LayoutDefault extends Component {
                     typeof this.props.backleft !== 'undefined' && !this.props.backleft ? null :
                     <BackLeft name={this.props.name} icon={this.props.icon} />
                 }
-                <View style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between' }} onLayout={ event => this.setState({ heightParent: event.nativeEvent.layout.height })}>
+                <View 
+                    style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}
+                    onLayout={ event => this.setState({ heightParent: event.nativeEvent.layout.height })}>
                 {
                     (typeof this.props.loading !== 'undefined' ? this.props.loading : this.state.loading) ? (
                         <View style={{ display: 'flex', flex: 1 }}>
@@ -42,7 +56,10 @@ class LayoutDefault extends Component {
                         </View>
                     ) :
                     (
-                        <ScrollView removeClippedSubviews={true} style={{ display: 'flex' }} ref={ (scroll_view) => { this.scroll_view = scroll_view } }>
+                        <Fragment_ 
+                            style={{ flex: 1}}
+                            ref={ (scroll_view) => { this.scroll_view = scroll_view } }
+                        >
                             <View style={[styles.childrenScrollView, { minHeight: this.state.heightParent > 0 ? this.state.heightParent : null }]}>
                                 <View style={styles.container}>
                                     <View style={typeof this.props.container !== 'undefined' && !this.props.container ? styles.parentContainer : [styles.propParentContainer, styles.parentContainer]}>
@@ -57,7 +74,7 @@ class LayoutDefault extends Component {
                                     : null
                                 }
                             </View>
-                        </ScrollView>
+                        </Fragment_>
                     )
                 }
                 </View>
@@ -71,7 +88,8 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
     container:{
-        padding: 10
+        padding: 10,
+        flex: 1
     },
     loading: {
         flex: 1
