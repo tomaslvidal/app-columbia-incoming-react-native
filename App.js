@@ -8,9 +8,9 @@ import { isSignedIn } from "./auth";
 
 import { Provider } from 'react-redux';
 
-import store from './store';
-
 import { createAppContainer } from 'react-navigation';
+
+import store from './store';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -23,21 +23,15 @@ export default class App extends React.Component {
 
     componentDidMount(){
         isSignedIn()
-        .then(res => {
-            this.setState({ signedIn: res, checkedSignIn: true });
-        })
+        .then(res => this.setState({ signedIn: res }));
     }
 
     render(){
         const { checkedSignIn, signedIn } = this.state;
         
-        const AppNavigator = createRootNavigator(signedIn);
+        const AppNavigator = createRootNavigator(true);
 
         const AppContainer = createAppContainer(AppNavigator);
-
-        if(!checkedSignIn) {
-            return null;
-        }
 
         return(
             <Provider store={store}>
