@@ -49,7 +49,7 @@ class LoginForm extends Component {
             errorBlock: {
                 color: '#FFE6E6'
             }
-        })
+        });
 
         this.state = {
             form: {
@@ -78,43 +78,41 @@ class LoginForm extends Component {
     enterAccount(){
         let user = this.formRef.getValue();
 
-        if(user !== null){
-            if(typeof user.email !== "undefined" && typeof user.contraseña !== "undefined"){
-                this.setState({
-                    loading: true
-                });
+        if(user){
+            this.setState({
+                loading: true
+            });
 
-                axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.contraseña}`)
-                .then(response => {
-                    setTimeout(() => {
-                        if(response.data.status === 'success'){
-                            this.setState({
-                                loading: false
-                            }, () => {
-                                onSignIn()
-                                .then(() => {
-                                    this.props.navigation.navigate("SignedIn");
-                                })
-                                .catch(e => {
-                                    console.log(e);
-                                });
-
-                                console.log("x: ", response.data);
-
-                                this.props.onSetLoguedAccount(response.data);
+            axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.contraseña}`)
+            .then(response => {
+                setTimeout(() => {
+                    if(response.data.status === 'success'){
+                        this.setState({
+                            loading: false
+                        }, () => {
+                            onSignIn()
+                            .then(() => {
+                                this.props.navigation.navigate("SignedIn");
+                            })
+                            .catch(e => {
+                                console.log(e);
                             });
-                        }
-                        else{
-                            this.setState({
-                                loading: false
-                            });
-                        }
-                    }, 1000);
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-            }
+
+                            console.log("x: ", response.data);
+
+                            this.props.onSetLoguedAccount(response.data);
+                        });
+                    }
+                    else{
+                        this.setState({
+                            loading: false
+                        });
+                    }
+                }, 1000);
+            })
+            .catch(e => {
+                console.log(e);
+            });
         }
     }
 

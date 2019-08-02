@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
 
 import FooterComponent from 'ColumbiaIncoming/components/FooterComponent';
 
@@ -129,6 +129,7 @@ export default class HomeView extends Component {
                             +54 9 11 5482 8853
                         </Text>
                     </View>
+                    
                     <FooterComponent />
                 </ImageBackground>
             </View>
