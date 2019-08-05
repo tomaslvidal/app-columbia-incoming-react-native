@@ -259,7 +259,7 @@ class SurveysContainer extends Component {
                             loading: false
                         }, () => {
                             Alert.alert('Mensaje', 'Encuesta realizada', [
-                                {text: 'OK'}
+                                { text: 'OK' }
                             ]);
                         });
                     })
@@ -268,7 +268,7 @@ class SurveysContainer extends Component {
             .catch( e => {
                 setTimeout(() => {
                     Alert.alert('Mensaje', 'No se ha podido enviar la encuesta', [
-                        {text: 'OK'}
+                        { text: 'OK' }
                     ]);
                 }, 1500);
             });

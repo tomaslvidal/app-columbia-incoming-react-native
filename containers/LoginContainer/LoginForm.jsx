@@ -71,8 +71,7 @@ class LoginForm extends Component {
                     }
                 }
             },
-            loading: false,
-            pending: false
+            loading: false
         }
     }
 
@@ -112,25 +111,39 @@ class LoginForm extends Component {
         }
     }
 
-  render(){
-    return (
-        <View style={styles.container}>
-            <View style={[styles.divPulseIndicator, { position: this.state.loading===true ? 'absolute' : null, display: this.state.loading === true ? 'flex' : 'none'}]}>
-                <PulseIndicator size={85} color="#D8D8D8"/>
-            </View>
+    render(){
+        return (
+            <View style={styles.container}>
+                <View style={[
+                    styles.divPulseIndicator, 
+                    {
+                        position: this.state.loading ? 'absolute' : null,
+                        display: this.state.loading ? 'flex' : 'none'
+                    }
+                    ]}
+                >
+                    <PulseIndicator size={85} color="#D8D8D8"/>
+                </View>
 
-            <View style={styles.form}>
-                <Form ref={c => this.formRef = c} type={this.state.form.struct} options={this.state.form.options}/>
+                <View style={styles.form}>
+                    <Form 
+                        ref={c => this.formRef = c} 
+                        type={this.state.form.struct} 
+                        options={this.state.form.options}
+                    />
 
-                <TouchableOpacity style={styles.buttonContainer} onPress={ () => this.enterAccount() }>
-                    <Text style={styles.buttonText}>
-                        INGRESAR
-                    </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.buttonContainer} 
+                        onPress={ () => this.enterAccount() }
+                    >
+                        <Text style={styles.buttonText}>
+                            INGRESAR
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
-    );
-  }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
