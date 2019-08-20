@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Linking } from 'react-native';
 
 import FooterComponent from 'ColumbiaIncoming/components/FooterComponent';
 
@@ -24,7 +24,8 @@ export default class HomeView extends Component {
                     size: 50,
                     color: '#1B76BC'
                 }
-            }
+            },
+            number_wpp: '54 9 11 5482 8853'
         }
     }
 
@@ -123,11 +124,19 @@ export default class HomeView extends Component {
                     </View>
 
                     <View style={{ paddingTop: 5, paddingBottom: 5, minWidth: '100%', justifyContent: 'center', borderRadius: 8, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, flexDirection: 'row', alignSelf: 'center', alignItems: 'center', backgroundColor: '#2D2D2DE0' }}>
-                        <FontAwesomeIcon size={this.state.config.icon.size-10} color="#25D366" icon={['fab', 'whatsapp-square']} />
+                            <FontAwesomeIcon 
+                                size={this.state.config.icon.size-10} 
+                                color="#25D366" 
+                                icon={['fab', 'whatsapp-square']} 
+                                onPress={() => Linking.openURL(`https://api.whatsapp.com/send?phone=${this.state.number_wpp.replace(/ /g, '')}`)}
+                            />
 
-                        <Text style={{ marginLeft: 10, color: '#F7F7F7', fontSize: 16, textAlignVertical: 'center', fontWeight: '500' }}>
-                            +54 9 11 5482 8853
-                        </Text>
+                            <Text 
+                                style={{ marginLeft: 10, color: '#F7F7F7', fontSize: 16, textAlignVertical: 'center', fontWeight: '500' }}
+                                onPress={() => Linking.openURL(`https://api.whatsapp.com/send?phone=${this.state.number_wpp.replace(/ /g, '')}`)}
+                            >
+                                +{this.state.number_wpp}
+                            </Text>
                     </View>
                     
                     <FooterComponent />
