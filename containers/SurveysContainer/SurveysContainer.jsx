@@ -75,7 +75,7 @@ class SurveysContainer extends Component {
         }, () => {
             axios({
                 method: 'GET',
-                url: `http://www.columbiaviajes.com/admin/services/api_encuestas.php?agencia_id=${this.props.account.id}`
+                url: `http://www.columbiaviajes.com/admin/services/api_encuestas.php`
             })
             .then(res => res.data)
             .then(res => {
@@ -208,7 +208,7 @@ class SurveysContainer extends Component {
                 },
                 data: parseFormData({
                     encuesta_id: item_param.id,
-                    agencia_id: 33,
+                    agencia_id: this.props.account.id,
                     preguntas: Object.keys(data).map((k) => {
                         let key = k;
 
@@ -251,14 +251,15 @@ class SurveysContainer extends Component {
             })
             .then(response => {
                 setTimeout(() => {
-                    this.hiddenSurveys({
+                    this.props.hiddenSurveys({
                         [item_param.id]: true
                     })
                     .then(() => {
                         this.props.setSurveys({
                             loading: false
-                        }, () => {
-                            Alert.alert('Mensaje', 'Encuesta realizada', [
+                        })
+                        .then(() => {
+                            Alert.alert('Info', 'Successful survey', [
                                 { text: 'OK' }
                             ]);
                         });
@@ -267,7 +268,7 @@ class SurveysContainer extends Component {
             })
             .catch( e => {
                 setTimeout(() => {
-                    Alert.alert('Mensaje', 'No se ha podido enviar la encuesta', [
+                    Alert.alert('Info', 'The survey could not be sent', [
                         { text: 'OK' }
                     ]);
                 }, 1500);
@@ -297,7 +298,7 @@ class SurveysContainer extends Component {
                                             key={index+"t"}
                                             style={[styles.buttonText, {}]}
                                         >
-                                            Enviar
+                                            Send
                                         </Text>
                                     </TouchableHighlight>
                                 </Panel>
