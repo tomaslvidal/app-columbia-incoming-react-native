@@ -42,7 +42,7 @@ export default class HomeView extends Component {
 
                                         <View style={{paddingTop: 6}}>
                                             <Text style={styles.text}>
-                                                {`Encuestas`}
+                                                {`Quality Survey`}
                                             </Text>
                                         </View>
                                     </View>
@@ -61,7 +61,7 @@ export default class HomeView extends Component {
 
                                         <View style={{paddingTop: 6}}>
                                             <Text style={styles.text}>
-                                                {`Tours Opciones`}
+                                                {`Optional tours`}
                                             </Text>
                                         </View>
                                     </View>
@@ -93,7 +93,7 @@ export default class HomeView extends Component {
 
                                         <View style={{paddingTop: 6}}>
                                             <Text style={styles.text}>
-                                                {`Vouchers\n e Itinerario`}
+                                                {`Vouchers\n and itinerary`}
                                             </Text>
                                         </View>
                                     </View>
@@ -113,7 +113,7 @@ export default class HomeView extends Component {
 
                                         <View style={{paddingTop: 6}}>
                                             <Text style={styles.text}>
-                                                {`Destinos\n y Mapas`}
+                                                {`Destination\n and Maps`}
                                             </Text>
                                         </View>
                                     </View>
@@ -127,7 +127,7 @@ export default class HomeView extends Component {
                             <FontAwesomeIcon 
                                 size={this.state.config.icon.size-10} 
                                 color="#25D366" 
-                                icon={['fab', 'whatsapp-square']} 
+                                icon={['fab', 'whatsapp-square']}
                                 onPress={() => Linking.openURL(`https://api.whatsapp.com/send?phone=${this.state.number_wpp.replace(/ /g, '')}`)}
                             />
 
