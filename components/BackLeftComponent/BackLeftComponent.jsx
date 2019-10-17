@@ -22,7 +22,7 @@ class BackLeft extends Component{
                     </View>
 
                     <View>
-                        <Text style={styles.textVolver}>Volver</Text>
+                        <Text style={styles.textVolver}>Back</Text>
                     </View>
                 </TouchableOpacity>
             </View>
