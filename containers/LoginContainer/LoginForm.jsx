@@ -55,17 +55,17 @@ class LoginForm extends Component {
             form: {
                 struct: t.struct({
                     email: t.String,
-                    contraseña: t.String
+                    password: t.String
                 }),
                 options: {
                     fields: {
                         email: {
                             stylesheet: this.stylesheet,
-                            error: 'Ingresar email'
+                            error: 'Enter email'
                         },
-                        contraseña: {
+                        password: {
                             stylesheet: this.stylesheet,
-                            error: 'Ingresar contraseña',
+                            error: 'Enter password',
                             secureTextEntry : true
                         }
                     }
@@ -83,7 +83,7 @@ class LoginForm extends Component {
                 this.setState({
                     loading: true,
                 }, () => {
-                    axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.contraseña}`)
+                    axios(`http://www.columbiaviajes.com/admin/for_app/login.php?email=${user.email}&password=${user.password}`)
                     .then(response => {
                         setTimeout(() => {
                             if(response.data.status === 'success'){
@@ -137,7 +137,7 @@ class LoginForm extends Component {
                         onPress={ () => this.enterAccount() }
                     >
                         <Text style={styles.buttonText}>
-                            INGRESAR
+                            Log in
                         </Text>
                     </TouchableOpacity>
                 </View>
