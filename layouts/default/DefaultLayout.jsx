@@ -39,10 +39,16 @@ class LayoutDefault extends Component {
 
         return(
             <View style={[{ flex: 1, flexDirection: 'column' }, {}]}>
-                <StatusBar backgroundColor='#2CAEE6' barStyle='light-content' />
+                <StatusBar 
+                    backgroundColor='#2CAEE6' 
+                    barStyle='light-content'
+                />
                 {
                     typeof this.props.backleft !== 'undefined' && !this.props.backleft ? null :
-                    <BackLeft name={this.props.name} icon={this.props.icon} />
+                    <BackLeft 
+                        name={this.props.name} 
+                        icon={this.props.icon}
+                    />
                 }
                 <View 
                     style={{ display: 'flex', flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}

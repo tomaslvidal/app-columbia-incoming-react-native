@@ -12,6 +12,14 @@ import FileComponent from 'ColumbiaIncoming/components/FileComponent';
 
 import { setVouchers } from 'ColumbiaIncoming/actions';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+import { faPlaneDeparture, faTimes } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPlaneDeparture, faTimes);
+
 class VoucherContainer extends Component {
     constructor(props){
         super(props);
@@ -56,7 +64,7 @@ class VoucherContainer extends Component {
             })
             .then(res => {
                 this.props.setVouchers({
-                    items: res.data,
+                    items: [],
                     loading: false
                 });
             })
@@ -70,9 +78,38 @@ class VoucherContainer extends Component {
         return(
             <Div is_refreshing={this.state.is_refreshing} onRefresh={this.onRefresh} name="Voucher e Initerarios" icon='bar-chart' loading={this.props.vouchers.loading}>
                 {
-                    this.props.vouchers.items.map((item, key) => {
-                        return <FileComponent key={key} name={item.title} url={item.url} style={styles.fileComponent} />
-                    })
+                    this.props.vouchers.items.length > 0 ?
+                        this.props.vouchers.items.map((item, key) => {
+                            return(
+                                <FileComponent 
+                                    key={key} 
+                                    name={item.title} 
+                                    url={item.url} 
+                                    style={styles.fileComponent} 
+                                />
+                            )
+                        })
+                    :
+                        (
+                            <View style={{ alignItems: 'center' }}>
+                                <FontAwesomeIcon 
+                                    size={37} 
+                                    color={"#10db7a"} 
+                                    icon={['fas', 'plane-departure']}
+                                />
+
+                                <FontAwesomeIcon 
+                                    size={25}
+                                    style={{ top: -30 }}
+                                    color={"#575958"} 
+                                    icon={['fas', 'times']}
+                                />
+
+                                <Text style={{ fontSize: 16, textAlign: 'center', marginTop: -17 }}>
+                                    You don't have vouchers, please contact with administration.
+                                </Text>
+                            </View>
+                        )
                 }
             </Div>
         );

@@ -20,7 +20,9 @@ export default class ItemContainer extends Component{
     constructor(props){
         super(props);
 
-        this.state = {};
+        this.state = {
+            heightParent: ""
+        };
 
         this.scrollView = this.scrollView.bind(this);
 
@@ -52,7 +54,7 @@ export default class ItemContainer extends Component{
                     }} indicator={Progress} source={{uri: this.props.item.image}} style={[styles.footerImage]} />
                 </View>
 
-                <View style={styles.box}>
+                <View style={[styles.box, { minHeight: this.state.heightParent > 0 ? (this.state.heightParent) : null }]} onLayout={ event => this.setState({ heightParent: event.nativeEvent.layout.height })} >
                     <Text style={styles.textTitle}>{this.props.item.title}</Text>
 
                     <HTML 

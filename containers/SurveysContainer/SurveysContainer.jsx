@@ -24,6 +24,14 @@ import { setSurveys, hiddenSurveys } from 'ColumbiaIncoming/actions';
 
 import parseFormData from 'json-form-data';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+import { faPlaneDeparture, faTimes } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPlaneDeparture, faTimes);
+
 let Form = t.form.Form;
 
 let stylesheet = JSON.parse(JSON.stringify(Form.stylesheet));
@@ -279,33 +287,57 @@ class SurveysContainer extends Component {
     render(){
         return(
             <Div onRefresh={this.onRefresh} is_refreshing={this.state.is_refreshing} name="Encuestas" icon='bar-chart' container={false} loading={this.props.surveys.loading}>
-                <FlatList
-                    data={this.props.surveys.items}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={ ({item, index}) => {
-                        if(!this.props.surveys.hiddens[item.id]) {
-                            return(
-                                <Panel key={index} title={item.name}>
-                                    <Form key={index+"f"} ref={(ref) => this["form"+item.id] = ref} type={item.types} options={item.options}/>
+                {
+                    this.props.surveys.items.length > 0 ?
+                        <FlatList
+                            data={this.props.surveys.items}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={ ({item, index}) => {
+                                if(!this.props.surveys.hiddens[item.id]) {
+                                    return(
+                                        <Panel key={index} title={item.name}>
+                                            <Form key={index+"f"} ref={(ref) => this["form"+item.id] = ref} type={item.types} options={item.options}/>
 
-                                    <TouchableHighlight 
-                                        key={index+"th"}
-                                        style={styles.button}
-                                        onPress={() => this.onPress(item)}
-                                        underlayColor={attributes.underlayColor}
-                                    >
-                                        <Text 
-                                            key={index+"t"}
-                                            style={[styles.buttonText, {}]}
-                                        >
-                                            Send
-                                        </Text>
-                                    </TouchableHighlight>
-                                </Panel>
-                            );
-                        }
-                    }}
-                />
+                                            <TouchableHighlight 
+                                                key={index+"th"}
+                                                style={styles.button}
+                                                onPress={() => this.onPress(item)}
+                                                underlayColor={attributes.underlayColor}
+                                            >
+                                                <Text 
+                                                    key={index+"t"}
+                                                    style={[styles.buttonText, {}]}
+                                                >
+                                                    Send
+                                                </Text>
+                                            </TouchableHighlight>
+                                        </Panel>
+                                    );
+                                }
+                            }}
+                        />
+                    :
+                        (
+                            <View style={{ alignItems: 'center' }}>
+                                <FontAwesomeIcon 
+                                    size={37} 
+                                    color={"#10db7a"} 
+                                    icon={['fas', 'plane-departure']}
+                                />
+
+                                <FontAwesomeIcon 
+                                    size={25}
+                                    style={{ top: -30 }}
+                                    color={"#575958"} 
+                                    icon={['fas', 'times']}
+                                />
+
+                                <Text style={{ fontSize: 16, textAlign: 'center', marginTop: -17 }}>
+                                    No surveys found.
+                                </Text>
+                            </View>
+                        )
+                }
             </Div>
         );
     }

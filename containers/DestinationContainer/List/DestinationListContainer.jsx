@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { View, FlatList, TouchableOpacity, StyleSheet, Linking, RefreshControl, ActivityIndicator } from 'react-native';
+import { View, FlatList, TouchableOpacity, StyleSheet, Linking, RefreshControl, ActivityIndicator, Text } from 'react-native';
 
 import DestinationBox from 'ColumbiaIncoming/components/DestinationBoxComponent'
 
@@ -11,6 +11,14 @@ import Div from 'ColumbiaIncoming/layouts/default';
 import { setDestinations } from "ColumbiaIncoming/actions";
 
 import { withNavigation } from 'react-navigation';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+import { faPlaneDeparture, faTimes } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPlaneDeparture, faTimes);
 
 import axios from 'axios';
 
@@ -98,19 +106,43 @@ class DestinationList extends Component {
 
         return (
             <Div name="Destinos" icon="wpforms" loading={this.props.destinations.loading} state_scroll_view={false}>
-                <FlatList
-                    data={this.props.destinations.items}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={renderItem}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.props.destinations.is_refreshing}
-                            onRefresh={this.onRefresh}
+                {
+                    this.props.destinations.items.length > 0 ?
+                        <FlatList
+                            data={this.props.destinations.items}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={renderItem}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.props.destinations.is_refreshing}
+                                    onRefresh={this.onRefresh}
+                                />
+                            }
+                            // ListFooterComponent={this.renderFooter}
+                            // onEndReached={this.handleLoadMore}
                         />
-                    }
-                    // ListFooterComponent={this.renderFooter}
-                    // onEndReached={this.handleLoadMore}
-                />
+                    :
+                        (
+                            <View style={{ alignItems: 'center' }}>
+                                <FontAwesomeIcon 
+                                    size={37} 
+                                    color={"#10db7a"} 
+                                    icon={['fas', 'plane-departure']}
+                                />
+
+                                <FontAwesomeIcon 
+                                    size={25}
+                                    style={{ top: -30 }}
+                                    color={"#575958"} 
+                                    icon={['fas', 'times']}
+                                />
+
+                                <Text style={{ fontSize: 16, textAlign: 'center', marginTop: -17 }}>
+                                    No destinations found
+                                </Text>
+                            </View>
+                        )
+                }
             </Div>
         );
     }
