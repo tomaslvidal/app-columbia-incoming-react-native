@@ -19,7 +19,7 @@ import VouchersContainer from './containers/VouchersContainer';
 export const SignedOut = createStackNavigator(
     {
         SignIn: {
-            screen: LoginContainer
+            screen: HomeContainer
         }
     },
     {

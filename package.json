@@ -26,6 +26,7 @@
     "react-native-gesture-handler": "^1.3.0",
     "react-native-image-progress": "^1.1.1",
     "react-native-indicators": "^0.13.0",
+    "react-native-open-maps": "^0.3.4",
     "react-native-progress": "^3.6.0",
     "react-native-render-html": "cheqeeh/react-native-render-html",
     "react-native-styled-image-progress": "^0.0.2",

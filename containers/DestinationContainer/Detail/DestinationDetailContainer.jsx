@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, Linking } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, Linking, Platform } from 'react-native';
 
 import HTML from 'react-native-render-html';
 
@@ -15,6 +15,8 @@ import Div from '../../../layouts/default';
 import { withNavigation } from 'react-navigation';
 
 import { updateDestination } from "ColumbiaIncoming/actions";
+
+import openMap from 'react-native-open-maps';
 
 import axios from 'axios';
 
@@ -121,22 +123,31 @@ class DestinationDetail extends Component {
                 <View style={styles.box}>
                     {
                         this.maxWidth !== 0 ?
-                        <Image
-                            source={{ uri: this.generateLink() }}
-                            style={{
-                                height: 195,
-                                width: '100%',
-                                marginBottom: 10
-                            }}
-                            indicatorProps={{
-                                size: 80,
-                                key: 'asd',
-                                borderWidth: 0,
-                                color: 'rgba(150, 150, 150, 1)',
-                                unfilledColor: 'rgba(200, 200, 200, 0.2)'
-                            }}
-                            indicator={Progress}
-                        />
+                        <TouchableOpacity 
+                            onPress={() => openMap({
+                                latitude: parseFloat(this.state.item.position.lat),
+                                longitude: parseFloat(this.state.item.position.lng),
+                                zoom: this.state.config.map_static.zoom + 3
+                            })}
+                            style={{ justifyContent: 'center', alignItems: 'center' }}
+                        >
+                            <Image
+                                source={{ uri: this.generateLink() }}
+                                style={{
+                                    height: 195,
+                                    width: '100%',
+                                    marginBottom: 10
+                                }}
+                                indicatorProps={{
+                                    size: 80,
+                                    key: 'asd',
+                                    borderWidth: 0,
+                                    color: 'rgba(150, 150, 150, 1)',
+                                    unfilledColor: 'rgba(200, 200, 200, 0.2)'
+                                }}
+                                indicator={Progress}
+                            />
+                        </TouchableOpacity>
                         : null
                     }
 
