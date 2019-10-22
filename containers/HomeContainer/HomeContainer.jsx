@@ -197,12 +197,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#2D2D2DE0',
         textAlign: 'center',
         borderRadius: 5,
-        padding: 15,
+        padding: 10,
         justifyContent: 'center',
         alignSelf: 'center',
         alignItems: 'center',
         width: '90%',
-        height: '75%'
+        height: '90%'
     },
     lineVertical:{
         height: '89%',

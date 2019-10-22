@@ -147,24 +147,13 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        display: 'flex',
-        flex: 2,
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
     divPulseIndicator:{
         flex: 1,
         justifyContent: 'center',
         alignItems : 'center',
-        bottom: '45%',
-        right: '34%'
-    },
-    form:{
-        display: 'flex', 
-        flex: 1, 
-        flexDirection: 'column', 
-        justifyContent: 'center'
+        position: 'absolute',
+        alignSelf: 'center',
+        bottom: '-5%'
     },
     buttonContainer:{
         backgroundColor: '#0F84CD',

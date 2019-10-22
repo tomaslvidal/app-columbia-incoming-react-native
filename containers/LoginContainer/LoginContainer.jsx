@@ -14,10 +14,17 @@ export default class Login extends Component {
             <View style={styles.container1}>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={[styles.container]}>
                     <View style={styles.loginContainer}>
-                        <Image resizeMode="contain" style={styles.logo} source={require('./logo_columbia.png')} />
+                        <Image resizeMode="stretch" style={styles.logo} source={require('./logo_columbia.png')} />
                     </View>
 
-                    <LoginForm />
+                    <View style={{
+                        justifyContent: 'center',
+                        display: 'flex',
+                        flex: 3,
+                        margin: 45
+                    }}>
+                        <LoginForm />
+                    </View>
                 </KeyboardAvoidingView>
             </View>
         );
@@ -28,19 +35,22 @@ const styles = StyleSheet.create({
     container1: {
         flex: 1,
         backgroundColor: '#2d3436',
-        padding: 30,
+        padding: 10,
     },
     container: {
         flex: 1,
-        width: '75%',
+        width: '100%',
         justifyContent: 'center',
         alignSelf: 'center'
     },
+    logo: {
+        width: '100%',
+        marginLeft: 47
+    }, 
     loginContainer:{
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        flex: 1,
-        marginLeft: 48
+        flex: 3,
     }
 });
