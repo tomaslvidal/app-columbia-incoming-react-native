@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:ColumbiaIncoming.xcodeproj">
+      location = "group:/Users/aptek/Documents/proyectos/columbia_incoming_native/ios/ColumbiaIncoming.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

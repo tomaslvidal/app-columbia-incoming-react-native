@@ -139,6 +139,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83CBBA001A601CBA00E9B192 /* Products */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				5F832D7C0D3754C6A31D838B /* libPods-ColumbiaIncoming.a */,
@@ -162,7 +163,6 @@
 				13B07FAE1A68108700A75B9A /* ColumbiaIncoming */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ColumbiaIncomingTests */,
-				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C01C831E5F67E5B8F38F05DA /* Pods */,
 			);
