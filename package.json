@@ -30,7 +30,7 @@
     "react-native-progress": "^3.6.0",
     "react-native-render-html": "cheqeeh/react-native-render-html",
     "react-native-styled-image-progress": "^0.0.2",
-    "react-native-svg": "^9.5.3",
+    "react-native-svg": "^9.13.3",
     "react-navigation": "^3.11.1",
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
