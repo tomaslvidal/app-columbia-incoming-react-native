@@ -30,44 +30,29 @@ class DestinationList extends Component {
 
         this.fetchDestinations = this.fetchDestinations.bind(this);
 
-        // this.renderFooter = this.renderFooter.bind(this);
+        this.renderFooter = this.renderFooter.bind(this);
 
-        // this.handleLoadMore = this.handleLoadMore.bind(this);
+        this.handleLoadMore = this.handleLoadMore.bind(this);
 
         this.onRefresh = this.onRefresh.bind(this);
     }
 
-    fetchDestinations(error = ''){
-        if(!error.length || error === 'x00003'){
-            axios.get('http://www.columbiaviajes.com/admin/services/api_destinosMapas.php')
-            .then(res => {
-                if(res.data instanceof Array){
-                    if(res.data.length){
-                        if(typeof res.data[0].image !== 'undefined'){
-                            this.props.setDestinations({
-                                items: res.data,
-                                pending: false,
-                                loading: false,
-                                is_refreshing: false,
-                                empty: res.data.length === 0 ? true : false
-                            });
-
-                            return;
-                        }
-                    }
-                }
-
-                if(!error.length){
-                    throw new Error('x00003');
-                }
-                else{
-                    throw new Error('x00003l');
-                }
+    fetchDestinations(page = 1, concat = true){
+        axios.get('http://www.columbiaviajes.com/admin/services/api_destinosMapas.php', {
+            params: {
+                page
+            }
+        })
+        .then(res => {
+            this.props.setDestinations({
+                items: concat ? this.props.destinations.items.concat(res.data) : res.data,
+                loading: false,
+                pending: false,
+                is_refreshing: false,
+                empty: res.data.length === 0 ? true : false,
+                page
             })
-            .catch((e) => {
-                this.fetchDestinations(e.message);
-            });
-        }
+        });
     }
 
     componentDidMount(){
@@ -85,35 +70,41 @@ class DestinationList extends Component {
         }
     }
 
-    // renderFooter(){
-    //     return(
-    //         !this.props.destinations.empty ?
-    //             <View style={{ marginTop: 5, width: '100%', justifyContent: 'center', alignContent: 'center', alignSelf: 'center' }}>
-    //                 <ActivityIndicator size="large" color="#2b8fd6"/>
-    //             </View>
-    //         : null
-    //     );
-    // }
+    renderFooter(){
+        return(
+            !this.props.destinations.empty ?
+                <View style={{ marginTop: 5, width: '100%', justifyContent: 'center', alignContent: 'center', alignSelf: 'center' }}>
+                    <ActivityIndicator size="large" color="#2b8fd6"/>
+                </View>
+            : null
+        );
+    }
 
-    // handleLoadMore(){
-    //     if(!this.props.destinations.empty && !this.props.destinations.pending){
-    //         this.props.setDestinations({
-    //             pending: true
-    //         })
-    //         .then(() => {
-    //             this.fetchDestinations();
-    //         });
-    //     }
-    // }
+    handleLoadMore(){
+        if(!this.props.destinations.empty && !this.props.destinations.pending){
+            let page = this.props.destinations.page;
+
+            page++;
+
+            this.props.setDestinations({
+                page,
+                pending: true
+            })
+            .then(() => {
+                this.fetchDestinations(this.props.destinations.page);
+            });
+        }
+    }
 
     onRefresh(){
         this.props.setDestinations({
+            page: 1,
             is_refreshing: true,
             pending: true,
             empty: false
         })
         .then(() => {
-            this.fetchDestinations();
+            this.fetchDestinations(this.props.destinations.page, false);
         })
     }
 
@@ -138,6 +129,8 @@ class DestinationList extends Component {
                                     onRefresh={this.onRefresh}
                                 />
                             }
+                            ListFooterComponent={this.renderFooter}
+                            onEndReached={this.handleLoadMore}
                         />
                     );
                 }

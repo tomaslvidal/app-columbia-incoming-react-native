@@ -6,19 +6,23 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, Linki
 
 import HTML from 'react-native-render-html';
 
-import Image from 'react-native-image-progress';
-
 import Progress from 'react-native-progress/Bar';
 
 import Div from '../../../layouts/default';
 
-import { withNavigation } from 'react-navigation';
+import axios from 'axios';
+
+import { createImageProgress } from 'react-native-image-progress';
 
 import { updateDestination } from "ColumbiaIncoming/actions";
 
-import openMap from 'react-native-open-maps';
+import { withNavigation } from 'react-navigation';
 
-import axios from 'axios';
+import FastImage from 'react-native-fast-image';
+
+const Image = createImageProgress(FastImage);
+
+import openMap from 'react-native-open-maps';
 
 const COORDINATES = {};
 
@@ -55,6 +59,28 @@ class DestinationDetail extends Component {
         this.generateLink = this.generateLink.bind(this);
 
         this.onRefresh = this.onRefresh.bind(this);
+    }
+
+    fetchDestination(){
+        axios.get(`http://www.columbiaviajes.com/admin/services/api_destinosMapas.php?id=${this.state.item.id}`)
+        .then(res => {
+            this.props.updateDestination({
+                key: this.props.navigation.state.params.key,
+                data: res.data
+            })
+            .then(() => {
+                this.setState({
+                    is_refreshing: false,
+                    item: this.props.destinations[this.props.navigation.state.params.key]
+                });
+            });
+        });
+    }
+
+    componentDidMount(){
+        if(typeof this.state.item.description === 'undefined'){
+            this.fetchDestination();
+        }
     }
 
     onRefresh(){
@@ -105,17 +131,18 @@ class DestinationDetail extends Component {
         icon="wpforms">
             <View onLayout={(e) => this._setMaxHeight(e)}>
                 <View style={{ marginLeft: -20, marginRight: -20 }}>
-                    <Image 
+                    <Image
+                        source={{
+                            uri: this.state.item.image, 
+                            cache: FastImage.cacheControl.cacheOnly,
+                            priority: FastImage.priority.high
+                        }}
                         indicatorProps={{
-                            size: 80,
-                            key: this.state.item.image,
-                            borderWidth: 0,
+                            size: 100,
                             color: 'rgba(150, 150, 150, 1)',
                             unfilledColor: 'rgba(200, 200, 200, 0.2)'
-                        }}
+                        }} 
                         indicator={Progress}
-                        resizeMethod="resize"
-                        source={{ uri: this.state.item.image }}
                         style={[styles.footerImage]}
                     />
                 </View>
@@ -132,7 +159,11 @@ class DestinationDetail extends Component {
                             style={{ justifyContent: 'center', alignItems: 'center' }}
                         >
                             <Image
-                                source={{ uri: this.generateLink() }}
+                                source={{
+                                    uri: this.generateLink(),
+                                    cache: FastImage.cacheControl.immutable,
+                                    priority: FastImage.priority.high
+                                }}
                                 style={{
                                     height: 195,
                                     width: '100%',
@@ -158,6 +189,7 @@ class DestinationDetail extends Component {
                         staticContentMaxWidth={ this.state.maxWidth ? this.state.maxWidth : null }
                         html={ typeof this.state.item.description !== 'undefined' ? this.state.item.description.es : '<div></div>' }
                         tagsStyles={ tagsStyles }
+                        textSelectable={true}
                         alterChildren = { node => {
                                 if(node.name === 'p'){
                                     if(typeof node.attribs['style'] != "undefined"){
@@ -182,32 +214,34 @@ class DestinationDetail extends Component {
                         }
                         renderers = {{
                             img: parameters => {
-                                let key = Math.random().toString(36).substr(2, 8);
+                                const key = Math.random().toString(36).substr(2, 5);
 
                                 return(
                                     <Image 
-                                        source={{ uri: parameters.src.replace('https', 'http') }}
+                                        source={{
+                                            uri: parameters.src.replace('https', 'http'),
+                                            cache: FastImage.cacheControl.immutable,
+                                            priority: FastImage.priority.normal
+                                        }}
                                         indicator={ Progress }
-                                        resizeMethod="resize"
                                         indicatorProps={{
-                                            size: 80,
-                                            borderWidth: 0,
+                                            size: 100,
                                             color: 'rgba(150, 150, 150, 1)',
                                             unfilledColor: 'rgba(200, 200, 200, 0.2)'
-                                        }}
-                                        key={key+'-'+parameters.src}
+                                        }} 
+                                        key={key}
                                         style={{
                                             width: (parameters => {
-                                                if(typeof parameters.width != "undefined"){
+                                                if(typeof parameters.width !== "undefined"){
                                                     return !isNaN(Number(parameters.width)) ? Number(parameters.width) : '100%';
                                                 }
 
-                                                if(typeof parameters.style != "undefined"){
+                                                if(typeof parameters.style !== "undefined"){
                                                     let array = parameters.style.split(';');
 
                                                     array = array.map(item => item.trim());
 
-                                                    array = array.filter(item => item.indexOf('width') !== -1);
+                                                    array = array.filter(item => item.indexOf('width')!=-1);
 
                                                     if(array.length>0){
                                                         array = array[0].split('width:');
@@ -221,16 +255,16 @@ class DestinationDetail extends Component {
                                                 return '100%';
                                             })(parameters),
                                             height: (parameters => {
-                                                if(typeof parameters.height != "undefined"){
+                                                if(typeof parameters.height !== "undefined"){
                                                     return !isNaN(Number(parameters.height)) ? Number(parameters.height) : 180;
                                                 }
 
-                                                if(typeof parameters.style != "undefined"){
+                                                if(typeof parameters.style !== "undefined"){
                                                     let array = parameters.style.split(';');
 
                                                     array = array.map(item => item.trim());
 
-                                                    array = array.filter(item => item.indexOf('height') !== -1);
+                                                    array = array.filter(item => item.indexOf('height')!=-1);
 
                                                     if(array.length>0){
                                                         array = array[0].split('height:');
@@ -241,7 +275,7 @@ class DestinationDetail extends Component {
                                                     }
                                                 }
 
-                                                return 180
+                                                return 180;
                                             })(parameters),
                                         }
                                     }/>
@@ -250,20 +284,24 @@ class DestinationDetail extends Component {
                             a: (parameters, two, three, four) => {
                                 let key = Math.random().toString(36).substr(2, 5);
 
-                                if(typeof parameters.href != "undefined"){
-                                    if(parameters.href == "#"){
-                                        if(typeof parameters.id != "undefined"){
-                                            if(parameters.id.length != 0){
+                                if(typeof parameters.href !== "undefined"){
+                                    if(parameters.href === "#"){
+                                        if(typeof parameters.id !== "undefined"){
+                                            if(parameters.id.length !== 0){
                                                     return(
-                                                        <View key={key} ref={ ref => this[parameters.id] = ref } onLayout={ ({nativeEvent}) => {
-                                                            if(this[parameters.id]) {
-                                                                this[parameters.id].measure((x, y, width, height, pageX, pageY) => {
-                                                                    COORDINATES[parameters.id] = pageY;
-                                                                });
-                                                            }
-                                                        }}>
-                                                            <Text >
-                                                                {two[0]}
+                                                        <View 
+                                                            key={key} 
+                                                            ref={ (ref) => this[parameters.id] = ref } 
+                                                            onLayout={ ({nativeEvent}) => {
+                                                                if(this[parameters.id]) {
+                                                                    this[parameters.id].measure((x, y, width, height, pageX, pageY) => {
+                                                                        COORDINATES[parameters.id] = pageY;
+                                                                    });
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Text>
+                                                                {two}
                                                             </Text>
                                                         </View>
                                                     );
@@ -272,21 +310,27 @@ class DestinationDetail extends Component {
                                     }
                                     else if(parameters.href.indexOf('#') === 0){
                                         return(
-                                            <TouchableOpacity key={key} onPress={() => { this.scrollView(parameters.href.slice(1)) } }>
-                                                <Text>{two}</Text>
+                                            <TouchableOpacity 
+                                                key={ key } 
+                                                onPress={() => { this.scrollView(parameters.href.slice(1)) } }
+                                            >
+                                                <Text>{ two }</Text>
                                             </TouchableOpacity>
                                         );
                                     }
                                     else{
                                         return(
-                                            <TouchableOpacity key={key} onPress={() => { this.onLinkPress(parameters.href) } }>
-                                                {two}
+                                            <TouchableOpacity 
+                                                key={ key } 
+                                                onPress={() => { this.onLinkPress(parameters.href) } }
+                                            >
+                                                <Text>{ two }</Text>
                                             </TouchableOpacity>
                                         );
                                     }
                                 }
 
-                                return(two);
+                                return two;
                             }
                         }}
                         />
