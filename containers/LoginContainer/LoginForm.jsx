@@ -76,9 +76,9 @@ class LoginForm extends Component {
     }
 
     enterAccount(){
-        let user = this.formRef.getValue();
-
         if(!this.state.loading){
+            let user = this.formRef.getValue();
+
             if(user){
                 this.setState({
                     loading: true,
